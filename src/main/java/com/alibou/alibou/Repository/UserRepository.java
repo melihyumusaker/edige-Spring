@@ -1,0 +1,14 @@
+package com.alibou.alibou.Repository;
+
+import com.alibou.alibou.Core.Roles.Role;
+import com.alibou.alibou.Model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<User, Integer> {
+    Optional<User> findByEmail(String email);
+    User findByRole(Role role);
+    Optional<User> findFirstByUsername (String username);
+}
