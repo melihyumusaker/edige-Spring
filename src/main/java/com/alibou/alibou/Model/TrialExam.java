@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -26,46 +27,46 @@ public class TrialExam {
     private Student student_id;
 
     @Column(name = "date")
-    private Date date;
+    private LocalDate date;
 
     @Column(name = "turkce_true")
-    private double  turkce_true;
+    private float    turkce_true;
 
     @Column(name = "turkce_false")
-    private double  turkce_false;
+    private float    turkce_false;
 
     @Column(name = "turkce_net")
-    private double  turkce_net;
+    private float    turkce_net;
 
     @Column(name = "mat_true")
-    private double  mat_true;
+    private float    mat_true;
 
     @Column(name = "mat_false")
-    private double  mat_false;
+    private float    mat_false;
 
     @Column(name = "mat_net")
-    private double  mat_net;
+    private float    mat_net;
 
     @Column(name = "fen_true")
-    private double  fen_true;
+    private float    fen_true;
 
     @Column(name = "fen_false")
-    private double   fen_false;
+    private float     fen_false;
 
     @Column(name = "fen_net")
-    private double  fen_net;
+    private float    fen_net;
 
     @Column(name = "sosyal_true")
-    private double  sosyal_true;
+    private float    sosyal_true;
 
     @Column(name = "sosyal_false")
-    private double  sosyal_false;
+    private float    sosyal_false;
 
     @Column(name = "sosyal_net")
-    private double  sosyal_net;
+    private float    sosyal_net;
 
     @Column(name = "net")
-    private double  net;
+    private float    net;
 
     @Column(name = "exam_name")
     private String exam_name;

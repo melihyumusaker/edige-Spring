@@ -24,23 +24,23 @@ public class TrialExamService implements ITrialExamService {
     @Override
     public TrialExam saveStudentTrialExamResult(SetTrialExamDTO request) {
         TrialExam trialExam = new TrialExam();
-        // Önce null check yapın ve varsayılan değeri belirleyin
-        double turkceTrue = request.getTurkce_true();
-        double turkceFalse = request.getTurkce_false();
-        double matTrue = request.getMat_true();
-        double matFalse = request.getMat_false();
-        double sosyalTrue = request.getSosyal_true();
-        double sosyalFalse = request.getSosyal_false();
-        double fenTrue = request.getFen_true();
-        double fenFalse = request.getFen_false();
 
-        double turkceNet = turkceTrue - (turkceFalse / 4);
-        double matNet = matTrue - (matFalse / 4);
-        double sosyalNet = sosyalTrue - (sosyalFalse / 4);
-        double fenNet = fenTrue - (fenFalse / 4);
-        double net = turkceNet + matNet + sosyalNet + fenNet;
+        float   turkceTrue = request.getTurkce_true();
+        float   turkceFalse = request.getTurkce_false();
+        float   matTrue = request.getMat_true();
+        float   matFalse = request.getMat_false();
+        float   sosyalTrue = request.getSosyal_true();
+        float   sosyalFalse = request.getSosyal_false();
+        float   fenTrue = request.getFen_true();
+        float   fenFalse = request.getFen_false();
 
-        trialExam.setStudent_id(request.getStudent_id());
+        float   turkceNet = turkceTrue - (turkceFalse / 4);
+        float   matNet = matTrue - (matFalse / 4);
+        float   sosyalNet = sosyalTrue - (sosyalFalse / 4);
+        float   fenNet = fenTrue - (fenFalse / 4);
+        float   net = turkceNet + matNet + sosyalNet + fenNet;
+
+        trialExam.setStudent_id(request.getStudent());
         trialExam.setExam_name(request.getExam_name());
         trialExam.setTurkce_false(turkceFalse);
         trialExam.setTurkce_true(turkceTrue);

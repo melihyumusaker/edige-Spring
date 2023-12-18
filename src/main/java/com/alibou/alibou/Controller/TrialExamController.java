@@ -7,10 +7,7 @@ import com.alibou.alibou.Service.TrialExamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,7 +27,7 @@ public class TrialExamController {
     }
 
     @PostMapping("/setStudentTrialExamResult")
-    public ResponseEntity<String> setStudentTrialExamResult(SetTrialExamDTO request){
+    public ResponseEntity<String> setStudentTrialExamResult(@RequestBody SetTrialExamDTO request){
         TrialExam result = trialExamService.saveStudentTrialExamResult(request);
         if (result != null) {
             return ResponseEntity.ok("Trial exam result saved successfully");
