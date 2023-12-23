@@ -11,5 +11,6 @@ public interface IStudentService {
 
     Student getStudentDetailsById(int studentId);
 
-    Relation postRelation(SetRelationDTO request);
+    Relation postRelation(SetRelationDTO request , int studentId);
+    int getStudentIdByUserId(int userId);
 }

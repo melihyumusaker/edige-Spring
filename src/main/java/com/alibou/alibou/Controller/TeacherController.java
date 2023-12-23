@@ -1,6 +1,8 @@
 package com.alibou.alibou.Controller;
 import com.alibou.alibou.Core.IServices.IMeetingService;
 import com.alibou.alibou.Core.IServices.IUserService;
+import com.alibou.alibou.DTO.Parent.GetParentIdByUserIdDTO;
+import com.alibou.alibou.DTO.Teacher.GetTeacherIdByUserIdDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -11,10 +13,8 @@ import com.alibou.alibou.Model.Student;
 import com.alibou.alibou.Model.Teacher;
 import com.alibou.alibou.Service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -49,6 +49,16 @@ public class TeacherController {
         }
 
         return ResponseEntity.ok(students);
+    }
+
+    @GetMapping("/getTeacherIdByUserId")
+    public ResponseEntity<?> getTeacherIdByUserId(@RequestBody GetTeacherIdByUserIdDTO request) {
+        try {
+            int teacher_id = teacherService.getTeacherIdByUserId(request.getUser_id());
+            return ResponseEntity.ok(teacher_id);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
 }
