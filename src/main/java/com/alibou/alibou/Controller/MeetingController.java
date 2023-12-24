@@ -1,6 +1,7 @@
 package com.alibou.alibou.Controller;
 import com.alibou.alibou.Core.IServices.IMeetingService;
 import com.alibou.alibou.DTO.Meeting.CreateMeetingDTO;
+import com.alibou.alibou.DTO.Meeting.UpdateMeetingDTO;
 import com.alibou.alibou.Model.Meeting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,17 @@ public class MeetingController {
             return ResponseEntity.ok("Meeting created successfully");
         } else {
             return ResponseEntity.badRequest().body("Meeting creation failed");
+        }
+    }
+
+    @PutMapping("/updateMeeting")
+    public ResponseEntity<String> updateMeeting(@RequestBody UpdateMeetingDTO request){
+        boolean isUpdated = meetingService.updateMeeting(request);
+
+        if (isUpdated) {
+            return ResponseEntity.ok("Meeting updated successfully");
+        } else {
+            return ResponseEntity.badRequest().body("Meeting not found");
         }
     }
 
