@@ -11,5 +11,4 @@ import java.util.Optional;
 public interface ParentRepository extends JpaRepository<Parent, Integer> {
     @Query("SELECT s FROM Parent s WHERE s.user.user_id= :userId")
     Optional<Parent> findByUserId(int userId);
-
 }

@@ -1,12 +1,15 @@
 package com.alibou.alibou.Service;
 import com.alibou.alibou.Core.IServices.ITrialExamService;
+import com.alibou.alibou.DTO.TrialExam.GetStudentTrialExamsDTO;
 import com.alibou.alibou.DTO.TrialExam.SetTrialExamDTO;
+import com.alibou.alibou.Model.Student;
 import com.alibou.alibou.Model.TrialExam;
 import com.alibou.alibou.Repository.TrialExamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TrialExamService implements ITrialExamService {
@@ -61,5 +64,34 @@ public class TrialExamService implements ITrialExamService {
 
         return trialExam;
     }
+
+    public List<GetStudentTrialExamsDTO> getAllTrialExamsByStudentId(int studentId) {
+
+
+        List<TrialExam> studentTrialExams = trialExamRepository.findAllByStudentId(studentId);
+
+        // DTO'ya dönüşüm işlemi
+        return studentTrialExams.stream()
+                .map(this::mapTrialExamToDTO)
+                .collect(Collectors.toList());
+    }
+
+    private GetStudentTrialExamsDTO mapTrialExamToDTO(TrialExam trialExam) {
+        GetStudentTrialExamsDTO dto = new GetStudentTrialExamsDTO();
+        dto.setDate(trialExam.getDate());
+        dto.setTurkce_true(trialExam.getTurkce_true());
+        dto.setTurkce_false(trialExam.getTurkce_false());
+        dto.setMat_true(trialExam.getMat_true());
+        dto.setMat_false(trialExam.getMat_false());
+        dto.setFen_true(trialExam.getFen_true());
+        dto.setFen_false(trialExam.getFen_false());
+        dto.setSosyal_true(trialExam.getSosyal_true());
+        dto.setSosyal_false(trialExam.getSosyal_false());
+        dto.setExam_name(trialExam.getExam_name());
+
+
+        return dto;
+    }
+
 
 }
