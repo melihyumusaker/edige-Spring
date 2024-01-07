@@ -58,7 +58,7 @@ public class StudentController {
     }
 
     // user_id'si verilen student'in student_id'sini döndürme
-    @GetMapping("/getStudentIdByUserId")
+    @PostMapping("/getStudentIdByUserId")
     public ResponseEntity<?> getStudentIdByUserId(@RequestBody GetStudentIdByUserIdDTO request) {
         try {
             int student_id = studentService.getStudentIdByUserId(request.getUser_id());
