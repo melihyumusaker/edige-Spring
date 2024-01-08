@@ -34,7 +34,7 @@ public class StudentController {
         return studentService.getAllStudents();
     }
 
-    @GetMapping("/getStudentById")
+    @PostMapping("/getStudentById")
     public ResponseEntity<?> getStudentById(@RequestBody GetStudentByIdRequestDTO request) {
         int student_id = request.getStudent_id();
 

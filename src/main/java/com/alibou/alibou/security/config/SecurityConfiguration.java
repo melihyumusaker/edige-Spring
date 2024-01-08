@@ -34,7 +34,7 @@ public class SecurityConfiguration {
                         .permitAll()
                         .requestMatchers(
                                 "/students/**" , "/parents/**", "/courses/**" , "/students-courses/**","/api/v1/auth/signup-student"
-                                ,"/meetings/**" ,  "/relations/**" ,  "/teachers/**" ,  "/trial-exams/**" , "/weekly-programs/**"
+                                ,"/meetings/**" ,  "/relations/**" ,  "/teachers/**" ,  "/trial-exams/**" , "/weekly-programs/**", "/users/**"
                                 ).permitAll()
                         .requestMatchers("/api/v1/admin").hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers("/api/v1/myUser").hasAnyAuthority(Role.STUDENT.name())
