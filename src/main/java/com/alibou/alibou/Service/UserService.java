@@ -1,6 +1,7 @@
 package com.alibou.alibou.Service;
 
 import com.alibou.alibou.Core.IServices.IUserService;
+import com.alibou.alibou.DTO.User.UserUpdateDTO;
 import com.alibou.alibou.Model.User;
 import com.alibou.alibou.Repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -23,6 +24,47 @@ public class UserService implements IUserService {
         return userRepository.findAll();
     }
 
+    public List<User> findAllActiveUsers() {
+        return userRepository.findAllActiveUsers();
+    }
+
+    public void deactivateUserById(int userId) {
+        userRepository.deactivateUserById(userId);
+    }
+
+    public User updateUser(int userId, UserUpdateDTO updatedUserDetails) {
+        User userToUpdate = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+
+        // Güncelleme işlemleri
+        if (updatedUserDetails.getName() != null) {
+            userToUpdate.setName(updatedUserDetails.getName());
+        }
+        if (updatedUserDetails.getSurname() != null) {
+            userToUpdate.setSurname(updatedUserDetails.getSurname());
+        }
+        if (updatedUserDetails.getEmail() != null) {
+            userToUpdate.setEmail(updatedUserDetails.getEmail());
+        }
+        if (updatedUserDetails.getPhone() != null) {
+            userToUpdate.setPhone(updatedUserDetails.getPhone());
+        }
+        if (updatedUserDetails.getCity() != null) {
+            userToUpdate.setCity(updatedUserDetails.getCity());
+        }
+        if (updatedUserDetails.getUsername() != null) {
+            userToUpdate.setUsername(updatedUserDetails.getUsername());
+        }
+        if (updatedUserDetails.getBirth_date() != null) {
+            userToUpdate.setBirth_date(updatedUserDetails.getBirth_date());
+        }
+        if (updatedUserDetails.getRole() != null) {
+            userToUpdate.setRole(updatedUserDetails.getRole());
+        }
+
+        return userRepository.save(userToUpdate);
+    }
+
     @Override
     public int getUserIdByEmail(String userEmail) {
         Optional<User> user = userRepository.findByEmail(userEmail);
@@ -33,6 +75,6 @@ public class UserService implements IUserService {
         else{
             throw new EntityNotFoundException("Kullanici bulunamadi");
         }
-
     }
+
 }

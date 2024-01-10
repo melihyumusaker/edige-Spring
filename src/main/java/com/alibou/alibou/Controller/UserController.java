@@ -2,12 +2,14 @@ package com.alibou.alibou.Controller;
 
 import com.alibou.alibou.Core.IServices.IStudentService;
 import com.alibou.alibou.Core.IServices.IUserService;
+import com.alibou.alibou.DTO.User.UserUpdateDTO;
 import com.alibou.alibou.Model.Student;
 import com.alibou.alibou.Model.User;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,8 +25,40 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<?>getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+    @GetMapping("/getAllActiveUsers")
+    public ResponseEntity<?> getAllActiveUsers() {
+        List<User> activeUsers = userService.findAllActiveUsers();
+        return ResponseEntity.ok(activeUsers);
+    }
+
+    @PutMapping("/{userId}/deactivate")
+    public ResponseEntity<String> deactivateUser(@PathVariable int userId) {
+        try {
+            userService.deactivateUserById(userId);
+            return ResponseEntity.ok("Kullanıcı pasif hale getirildi.");
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kullanıcı bulunamadı.");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Bir hata oluştu.");
+        }
+    }
+
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<?> updateUser(@PathVariable int userId, @RequestBody UserUpdateDTO updatedUserDetails) {
+        try {
+            User updatedUser = userService.updateUser(userId, updatedUserDetails);
+            return ResponseEntity.ok("Güncelleme Başarılı");
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kullanıcı bulunamadı.");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Bir hata oluştu.");
+        }
+
+
     }
 
 }

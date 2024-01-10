@@ -48,6 +48,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setPhone(signUpRequest.getPhone());
         user.setCity(signUpRequest.getCity());
         user.setUsername(UsernameGenerator.generateUsername(signUpRequest.getName(), signUpRequest.getSurname(),signUpRequest.getPhone()));
+        user.setIs_active(1);
         student.setSection(signUpRequest.getSection());
         student.setSchool(signUpRequest.getSchool());
 
@@ -77,6 +78,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setBirth_date(signUpTeacherRequest.getBirth_date());
         user.setPhone(signUpTeacherRequest.getPhone());
         user.setCity(signUpTeacherRequest.getCity());
+        user.setIs_active(1);
         user.setUsername(UsernameGenerator.generateUsername(signUpTeacherRequest.getName(), signUpTeacherRequest.getSurname(),signUpTeacherRequest.getPhone()));
         teacher.setExpertise(signUpTeacherRequest.getExpertise());
 
@@ -107,6 +109,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setBirth_date(signUpParentRequest.getBirth_date());
         user.setPhone(signUpParentRequest.getPhone());
         user.setCity(signUpParentRequest.getCity());
+        user.setIs_active(1);
         user.setUsername(UsernameGenerator.generateUsername(signUpParentRequest.getName(), signUpParentRequest.getSurname(),signUpParentRequest.getPhone()));
 
         userRepository.save(user);
