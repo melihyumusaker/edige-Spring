@@ -9,6 +9,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -39,5 +40,10 @@ public class TeacherService implements ITeacherService {
         return teacher.getTeacher_id();
     }
 
-
+    @Override
+    public List<Teacher> getTeachersByStudentType(String studentType) {
+        List<Teacher> teachers = teacherRepository.findTeachersByStudentType(studentType);
+        Collections.shuffle(teachers);
+        return teachers;
+    }
 }

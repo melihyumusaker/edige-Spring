@@ -11,6 +11,8 @@ public interface IStudentService {
 
     Student getStudentDetailsById(int studentId);
 
-    Relation postRelation(SetRelationDTO request , int studentId);
+    Relation postRelation(int teacher_id , int studentId);
     int getStudentIdByUserId(int userId);
+
+    void setEnneagramTestSolved(int studentId);
 }

@@ -42,7 +42,7 @@ public class StudentService implements IStudentService {
         }
     }
     @Override
-    public Relation postRelation(SetRelationDTO request , int studentId) {
+    public Relation postRelation(int teacher_id , int studentId) {
 
         // Relation tablesine veri ekleme
         Relation relation = new Relation();
@@ -51,7 +51,7 @@ public class StudentService implements IStudentService {
         student.setStudent_id(studentId);
 
         Teacher teacher = new Teacher();
-        teacher.setTeacher_id(request.getTeacher_id());
+        teacher.setTeacher_id(teacher_id);
 
         relation.setStudent_id(student);
         relation.setTeacher_id(teacher);
@@ -59,7 +59,7 @@ public class StudentService implements IStudentService {
         relationRepository.save(relation);
 
         // Student tablesini güncelleme
-        Optional<Teacher> teacher1 = teacherRepository.findById(request.getTeacher_id());
+        Optional<Teacher> teacher1 = teacherRepository.findById(teacher_id);
         Optional<Student> student1 = studentRepository.findById(studentId);
 
         if (student1.isPresent() && teacher1.isPresent()) {
@@ -75,6 +75,17 @@ public class StudentService implements IStudentService {
                 .orElseThrow(() -> new EntityNotFoundException("Öğrenci bulunamadı: " + userId));
 
         return student.getStudent_id();
+    }
+
+    public void setEnneagramTestSolved(int studentId) {
+        Optional<Student> studentOptional = studentRepository.findById(studentId);
+        if (studentOptional.isPresent()) {
+            Student student = studentOptional.get();
+            student.setIs_enneagram_test_solved(1);
+            studentRepository.save(student);
+        } else {
+            throw new EntityNotFoundException("Student not found with ID: " + studentId);
+        }
     }
 
 }

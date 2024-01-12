@@ -6,6 +6,7 @@ import com.alibou.alibou.DTO.Parent.GetParentIdByUserIdDTO;
 import com.alibou.alibou.DTO.Relation.SetRelationDTO;
 import com.alibou.alibou.DTO.Student.GetStudentByIdRequestDTO;
 import com.alibou.alibou.DTO.Student.GetStudentIdByUserIdDTO;
+import com.alibou.alibou.DTO.Student.SetStudentsEnneagramResultDTO;
 import com.alibou.alibou.Model.Relation;
 import com.alibou.alibou.Model.Student;
 import com.alibou.alibou.Service.StudentService;
@@ -53,7 +54,7 @@ public class StudentController {
         int userId = userService.getUserIdByEmail(userEmail);
         int studentId = studentService.getStudentIdByUserId(userId);
 
-        Relation relation = studentService.postRelation(request,studentId);
+        Relation relation = studentService.postRelation(request.getTeacher_id(),studentId);
         return ResponseEntity.ok(relation);
     }
 
@@ -67,4 +68,16 @@ public class StudentController {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
+
+    @PostMapping("/setStudentsEnneagramResult")
+    public ResponseEntity<?> setStudentsEnneagramResult(@RequestBody SetStudentsEnneagramResultDTO request) {
+        try {
+            studentService.setEnneagramTestSolved(request.getStudent_id());
+            studentService.postRelation(request.getTeacher_id() , request.getStudent_id());
+            return ResponseEntity.ok().build();
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
 }

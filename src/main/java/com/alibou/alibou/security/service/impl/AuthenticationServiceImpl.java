@@ -51,6 +51,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setIs_active(1);
         student.setSection(signUpRequest.getSection());
         student.setSchool(signUpRequest.getSchool());
+        student.setIs_enneagram_test_solved(0);
 
         userRepository.save(user);
 

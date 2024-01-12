@@ -9,4 +9,5 @@ public interface ITeacherService {
     List<Teacher> getAllTeachers();
     List<Student> getStudentsByTeacherId(int teacherId);
     int getTeacherIdByUserId(int userId);
+    List<Teacher> getTeachersByStudentType(String studentType);
 }
