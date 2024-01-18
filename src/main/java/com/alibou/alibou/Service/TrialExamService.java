@@ -88,7 +88,10 @@ public class TrialExamService implements ITrialExamService {
         dto.setSosyal_true(trialExam.getSosyal_true());
         dto.setSosyal_false(trialExam.getSosyal_false());
         dto.setExam_name(trialExam.getExam_name());
-
+        dto.setTurkce_net(trialExam.getTurkce_net());
+        dto.setFen_net(trialExam.getFen_net());
+        dto.setMat_net(trialExam.getMat_net());
+        dto.setSosyal_net(trialExam.getSosyal_net());
 
         return dto;
     }

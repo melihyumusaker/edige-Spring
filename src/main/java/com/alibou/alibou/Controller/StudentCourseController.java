@@ -1,13 +1,16 @@
 package com.alibou.alibou.Controller;
 
 import com.alibou.alibou.Core.IServices.IStudentCourseService;
+import com.alibou.alibou.DTO.StudentCourse.GetStudentsCoursesDTO;
+import com.alibou.alibou.Model.Course;
 import com.alibou.alibou.Model.Student;
 import com.alibou.alibou.Model.StudentCourse;
 import com.alibou.alibou.Service.StudentCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -23,6 +26,17 @@ public class StudentCourseController {
     @GetMapping("/all")
     public List<StudentCourse> getAllStudents() {
         return studentCourseService.getAllStudentAndCourses();
+    }
+
+
+    @PostMapping("/get-students-done-courses")
+    public ResponseEntity<List<Course>> getStudentsDoneCourses(@RequestBody GetStudentsCoursesDTO request) {
+        try {
+            List<Course> courses = studentCourseService.getDoneCoursesByStudentIdAndIsHomeworkDone(request.getStudent_id());
+            return ResponseEntity.ok(courses);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
 }

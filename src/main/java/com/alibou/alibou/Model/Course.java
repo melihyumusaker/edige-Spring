@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -24,9 +26,15 @@ public class Course {
     @Column(name = "subcourse_name")
     private String subcourse_name;
 
+    @Column(name = "student_comment")
+    private String student_comment;
+
     @Column(name = "homework_description")
     private String homework_description;
 
     @Column(name = "is_homework_done")
     private Integer is_homework_done;
+
+    @Column(name = "homework_deadline")
+    private LocalDateTime homework_deadline;
 }

@@ -48,7 +48,6 @@ public class TrialExamController {
 
     @GetMapping ("/getStudentTrialExams")
     public ResponseEntity<?> getStudentTrialExams(){
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
         int userId = userService.getUserIdByEmail(userEmail);

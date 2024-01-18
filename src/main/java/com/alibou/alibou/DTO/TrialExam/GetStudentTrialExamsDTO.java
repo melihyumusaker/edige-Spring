@@ -16,4 +16,9 @@ public class GetStudentTrialExamsDTO {
     private float sosyal_true;
     private float sosyal_false;
     private String exam_name;
+    private float    turkce_net;
+    private float    mat_net;
+    private float    fen_net;
+    private float    sosyal_net;
+
 }
