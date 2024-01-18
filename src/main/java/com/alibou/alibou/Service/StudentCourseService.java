@@ -1,6 +1,7 @@
 package com.alibou.alibou.Service;
 
 import com.alibou.alibou.Core.IServices.IStudentCourseService;
+import com.alibou.alibou.DTO.StudentCourse.StudentFinishHomeworkDTO;
 import com.alibou.alibou.Model.Course;
 import com.alibou.alibou.Model.Student;
 import com.alibou.alibou.Model.StudentCourse;
@@ -57,5 +58,7 @@ public class StudentCourseService implements IStudentCourseService {
             throw new RuntimeException("Error while fetching not done courses for student with ID: " + studentId, ex);
         }
     }
+
+
 
 }

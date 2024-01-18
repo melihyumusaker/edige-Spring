@@ -2,6 +2,7 @@ package com.alibou.alibou.Controller;
 
 import com.alibou.alibou.Core.IServices.IStudentCourseService;
 import com.alibou.alibou.DTO.StudentCourse.GetStudentsCoursesDTO;
+import com.alibou.alibou.DTO.StudentCourse.StudentFinishHomeworkDTO;
 import com.alibou.alibou.Model.Course;
 import com.alibou.alibou.Model.Student;
 import com.alibou.alibou.Model.StudentCourse;

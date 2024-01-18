@@ -1,5 +1,6 @@
 package com.alibou.alibou.Core.IServices;
 
+import com.alibou.alibou.DTO.StudentCourse.StudentFinishHomeworkDTO;
 import com.alibou.alibou.Model.Course;
 import com.alibou.alibou.Model.StudentCourse;
 
@@ -13,4 +14,6 @@ public interface IStudentCourseService {
     List<Course> getNotDoneCoursesByStudentIdAndIsHomeworkDone(int studentId);
 
     List<Course> getAllCoursesByStudentId(int studentId);
+
+
 }
