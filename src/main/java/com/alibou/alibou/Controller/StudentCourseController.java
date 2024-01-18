@@ -29,10 +29,29 @@ public class StudentCourseController {
     }
 
 
+    @PostMapping("/get-all-students-courses")
+    public ResponseEntity<List<Course>> getAllStudentsCourses(@RequestBody GetStudentsCoursesDTO request) {
+        try {
+            List<Course> courses = studentCourseService.getAllCoursesByStudentId(request.getStudent_id());
+            return ResponseEntity.ok(courses);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
     @PostMapping("/get-students-done-courses")
     public ResponseEntity<List<Course>> getStudentsDoneCourses(@RequestBody GetStudentsCoursesDTO request) {
         try {
             List<Course> courses = studentCourseService.getDoneCoursesByStudentIdAndIsHomeworkDone(request.getStudent_id());
+            return ResponseEntity.ok(courses);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping("/get-students-not-done-courses")
+    public ResponseEntity<List<Course>> getStudentsNotDoneCourses(@RequestBody GetStudentsCoursesDTO request) {
+        try {
+            List<Course> courses = studentCourseService.getNotDoneCoursesByStudentIdAndIsHomeworkDone(request.getStudent_id());
             return ResponseEntity.ok(courses);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

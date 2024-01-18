@@ -9,4 +9,8 @@ public interface IStudentCourseService {
     List<StudentCourse> getAllStudentAndCourses();
 
     List<Course> getDoneCoursesByStudentIdAndIsHomeworkDone(int student_id);
+
+    List<Course> getNotDoneCoursesByStudentIdAndIsHomeworkDone(int studentId);
+
+    List<Course> getAllCoursesByStudentId(int studentId);
 }

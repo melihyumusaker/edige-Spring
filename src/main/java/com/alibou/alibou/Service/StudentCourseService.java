@@ -26,7 +26,16 @@ public class StudentCourseService implements IStudentCourseService {
         return studentCourseRepository.findAll();
     }
 
-
+    public List<Course> getAllCoursesByStudentId(int studentId) {
+        try{
+            return studentCourseRepository.findAllByStudentId(studentId)
+                    .stream()
+                    .map(StudentCourse::getCourse_id)
+                    .collect(Collectors.toList());
+        } catch (Exception ex) {
+            throw new RuntimeException("Error while fetching not done courses for student with ID: " + studentId, ex);
+        }
+    }
     public List<Course> getDoneCoursesByStudentIdAndIsHomeworkDone(int studentId) {
        try{
            return studentCourseRepository.findAllByStudentIdAndIsHomeworkDone(studentId)
@@ -36,6 +45,17 @@ public class StudentCourseService implements IStudentCourseService {
        } catch (Exception ex) {
            throw new RuntimeException("Error while fetching done courses for student with ID: " + studentId, ex);
        }
+    }
+
+    public List<Course> getNotDoneCoursesByStudentIdAndIsHomeworkDone(int studentId) {
+        try{
+            return studentCourseRepository.findAllByStudentIdAndIsHomeworkNotDone(studentId)
+                    .stream()
+                    .map(StudentCourse::getCourse_id)
+                    .collect(Collectors.toList());
+        } catch (Exception ex) {
+            throw new RuntimeException("Error while fetching not done courses for student with ID: " + studentId, ex);
+        }
     }
 
 }

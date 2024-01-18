@@ -24,8 +24,8 @@ public class RelationController {
     }
 
     @GetMapping("/all")
-    public List<Relation> getAllStudents() {
-        return relationService.getAllRelations();
+    public ResponseEntity<?> getAllStudents() {
+        return ResponseEntity.ok(relationService.getAllRelations());
     }
 
     @GetMapping("/getRelationIdByTeacherAndStudentId")

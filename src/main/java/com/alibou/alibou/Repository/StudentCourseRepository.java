@@ -10,6 +10,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface StudentCourseRepository extends JpaRepository<StudentCourse,Integer> {
+
+    @Query("SELECT sc FROM StudentCourse sc WHERE sc.student_id.student_id = ?1")
+    List<StudentCourse> findAllByStudentId(int student_id);
     @Query("SELECT sc FROM StudentCourse sc WHERE sc.student_id.student_id = ?1 AND sc.course_id.is_homework_done = 1")
     List<StudentCourse> findAllByStudentIdAndIsHomeworkDone(int student_id);
+
+    @Query("SELECT sc FROM StudentCourse sc WHERE sc.student_id.student_id = ?1 AND sc.course_id.is_homework_done = 0")
+    List<StudentCourse> findAllByStudentIdAndIsHomeworkNotDone(int student_id);
 }
