@@ -27,7 +27,7 @@ public class WeeklyProgram {
     private String lesson_name;
 
     @Column(name = "day")
-    private LocalDate day;
+    private String day;
 
     @Column(name = "lesson_start_hour")
     private String lesson_start_hour;

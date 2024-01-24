@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public class UpdateWeeklyProgramDTO {
     private Integer weekly_program_id;
     private String lesson_name;
-    private LocalDate day;
+    private String day;
     private String lesson_start_hour;
     private String lesson_end_hour;
 }

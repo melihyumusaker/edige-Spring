@@ -38,7 +38,7 @@ public class WeeklyProgramService implements IWeeklyProgramService {
     public boolean createWeeklyProgram(CreateWeeklyProgramDTO request){
         int studentId = request.getStudent_id();
         String lessonName = request.getLesson_name();
-        LocalDate day = request.getDay();
+        String day = request.getDay();
         String lessonStartHour = request.getLesson_start_hour();
         String lessonEndHour = request.getLesson_end_hour();
 
@@ -63,7 +63,7 @@ public class WeeklyProgramService implements IWeeklyProgramService {
     public boolean updateWeeklyProgram(UpdateWeeklyProgramDTO request){
         int weeklyProgramId = request.getWeekly_program_id();
         String lessonName = request.getLesson_name();
-        LocalDate day = request.getDay();
+        String day = request.getDay();
         String lessonStartHour = request.getLesson_start_hour();
         String lessonEndHour = request.getLesson_end_hour();
 

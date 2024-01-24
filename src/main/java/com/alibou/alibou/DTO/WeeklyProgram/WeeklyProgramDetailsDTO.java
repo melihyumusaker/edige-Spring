@@ -7,7 +7,7 @@ import java.time.LocalDate;
 @Data
 public class WeeklyProgramDetailsDTO {
     private String lessonName;
-    private LocalDate day;
+    private String day;
     private String lessonStartHour;
     private String lessonEndHour;
 
