@@ -48,9 +48,9 @@ public class UserController {
     }
 
     @PutMapping("/update/{userId}")
-    public ResponseEntity<?> updateUser(@PathVariable int userId, @RequestBody UserUpdateDTO updatedUserDetails) {
+    public ResponseEntity<?> updateUser( @RequestBody UserUpdateDTO updatedUserDetails) {
         try {
-            User updatedUser = userService.updateUser(userId, updatedUserDetails);
+            User updatedUser = userService.updateUser(updatedUserDetails.getUser_id(), updatedUserDetails);
             return ResponseEntity.ok("Güncelleme Başarılı");
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kullanıcı bulunamadı.");

@@ -7,6 +7,7 @@ import java.util.Date;
 
 @Data
 public class UserUpdateDTO {
+    private int user_id;
     private String name;
     private String surname;
     private String email;
