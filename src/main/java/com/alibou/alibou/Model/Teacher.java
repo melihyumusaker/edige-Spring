@@ -25,6 +25,9 @@ public class Teacher {
     @Column(name = "enneagram_result")
     private String enneagram_result;
 
+    @Column(name = "about")
+    private String about;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user; // Bu user_id'yi referans alacak şekilde User modeline bir referans
