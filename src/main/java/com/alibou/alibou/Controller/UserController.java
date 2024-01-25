@@ -47,7 +47,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update/{userId}")
+    @PutMapping("/update")
     public ResponseEntity<?> updateUser( @RequestBody UserUpdateDTO updatedUserDetails) {
         try {
             User updatedUser = userService.updateUser(updatedUserDetails.getUser_id(), updatedUserDetails);
