@@ -4,6 +4,7 @@ import com.alibou.alibou.Core.IServices.IUserService;
 import com.alibou.alibou.DTO.Parent.GetParentIdByUserIdDTO;
 import com.alibou.alibou.DTO.Teacher.GetTeacherIdByUserIdDTO;
 import com.alibou.alibou.DTO.Teacher.GetTeachersByStudentTypeDTO;
+import com.alibou.alibou.DTO.Teacher.UpdateTeacherEnneagramTypeAndAboutDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -52,7 +53,7 @@ public class TeacherController {
         return ResponseEntity.ok(students);
     }
 
-    @GetMapping("/getTeacherIdByUserId")
+    @PostMapping("/getTeacherIdByUserId")
     public ResponseEntity<?> getTeacherIdByUserId(@RequestBody GetTeacherIdByUserIdDTO request) {
         try {
             int teacher_id = teacherService.getTeacherIdByUserId(request.getUser_id());
@@ -72,6 +73,44 @@ public class TeacherController {
             }
 
             return ResponseEntity.ok(teachers);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @PostMapping("/getTeacherInfo")
+    public ResponseEntity<?> getTeacherInfo() {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userEmail = authentication.getName();
+
+            int userId = userService.getUserIdByEmail(userEmail);
+            int teacherId = teacherService.getTeacherIdByUserId(userId);
+
+            Teacher teacherDetails = teacherService.getTeacherDetails(teacherId);
+
+            return ResponseEntity.ok(teacherDetails);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @PostMapping("/updateTeacherEnneagramTypeAndAbout")
+    public ResponseEntity<?> updateTeacherEnneagramTypeAndAbout(@RequestBody UpdateTeacherEnneagramTypeAndAboutDTO request) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userEmail = authentication.getName();
+
+            int userId = userService.getUserIdByEmail(userEmail);
+            int teacherId = teacherService.getTeacherIdByUserId(userId);
+
+            boolean isUpdated = teacherService.updateTeacherAboutAndEnneagramTestSolved(request , teacherId);
+
+            if (isUpdated) {
+                return ResponseEntity.ok("Teacher updated successfully");
+            } else {
+                return ResponseEntity.badRequest().body("Teacher not found or invalid data");
+            }
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }

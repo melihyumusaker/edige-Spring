@@ -31,4 +31,7 @@ public class Teacher {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user; // Bu user_id'yi referans alacak şekilde User modeline bir referans
+
+    @Column(name = "is_enneagram_test_solved")
+    private Integer is_enneagram_test_solved;
 }
