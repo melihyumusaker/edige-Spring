@@ -9,7 +9,7 @@ import java.util.Date;
 @Data
 public class SetTrialExamDTO {
 
-    private Student student;
+    private int student_id;
     private LocalDate date;
     private float turkce_true;
     private float turkce_false;

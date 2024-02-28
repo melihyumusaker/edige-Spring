@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ITrialExamService {
     List<TrialExam> getAllTrialExams();
-    TrialExam saveStudentTrialExamResult(SetTrialExamDTO request);
+    boolean saveStudentTrialExamResult(SetTrialExamDTO request);
     List<GetStudentTrialExamsDTO> getAllTrialExamsByStudentId(int studentId);
 }

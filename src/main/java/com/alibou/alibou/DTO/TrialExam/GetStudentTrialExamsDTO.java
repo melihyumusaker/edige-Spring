@@ -20,5 +20,6 @@ public class GetStudentTrialExamsDTO {
     private float    mat_net;
     private float    fen_net;
     private float    sosyal_net;
+    private float net;
 
 }

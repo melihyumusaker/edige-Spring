@@ -38,8 +38,8 @@ public class TrialExamController {
 
     @PostMapping("/setStudentTrialExamResult")
     public ResponseEntity<String> setStudentTrialExamResult(@RequestBody SetTrialExamDTO request){
-        TrialExam result = trialExamService.saveStudentTrialExamResult(request);
-        if (result != null) {
+        boolean isCreated = trialExamService.saveStudentTrialExamResult(request);
+        if (isCreated) {
             return ResponseEntity.ok("Trial exam result saved successfully");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save trial exam result");
