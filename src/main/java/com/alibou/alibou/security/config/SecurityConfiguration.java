@@ -33,11 +33,15 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**")
                         .permitAll()
                         .requestMatchers(
-                                "/students/**" , "/parents/**", "/courses/**" , "/students-courses/**","/api/v1/auth/signup-student"
+                                "/students/**" , "/parents/**","/api/v1/auth/signup-student"
                                 ,"/meetings/**" ,  "/relations/**" ,  "/teachers/**" ,  "/trial-exams/**" , "/weekly-programs/**", "/users/**"
                                 ).permitAll()
-                        .requestMatchers("/api/v1/admin").hasAnyAuthority(Role.ADMIN.name())
-                        .requestMatchers("/api/v1/myUser").hasAnyAuthority(Role.STUDENT.name())
+                        .requestMatchers("/course/studentFinishHomework").permitAll()
+                        .requestMatchers("/course/addNewCourse").hasAnyAuthority(Role.TEACHER.name())
+                        .requestMatchers("/students-courses/addNewStudentCourse").hasAnyAuthority(Role.TEACHER.name())
+                        .requestMatchers("/students-courses/get-all-students-courses").permitAll()
+                        .requestMatchers("/students-courses/get-students-done-courses").permitAll()
+                        .requestMatchers("/students-courses/get-students-not-done-courses").permitAll()
                         .anyRequest().authenticated())
                 .cors(Customizer.withDefaults())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

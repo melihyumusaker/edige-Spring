@@ -58,7 +58,6 @@ public class StudentController {
         return ResponseEntity.ok(relation);
     }
 
-    // user_id'si verilen student'in student_id'sini döndürme
     @PostMapping("/getStudentIdByUserId")
     public ResponseEntity<?> getStudentIdByUserId(@RequestBody GetStudentIdByUserIdDTO request) {
         try {

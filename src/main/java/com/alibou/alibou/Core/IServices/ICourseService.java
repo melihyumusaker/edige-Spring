@@ -1,5 +1,6 @@
 package com.alibou.alibou.Core.IServices;
 
+import com.alibou.alibou.DTO.Course.AddNewCourseDTO;
 import com.alibou.alibou.DTO.StudentCourse.StudentFinishHomeworkDTO;
 import com.alibou.alibou.Model.Course;
 
@@ -9,4 +10,6 @@ public interface ICourseService {
     List<Course> getAllCourses();
 
     void studentFinishHomework(StudentFinishHomeworkDTO request);
+
+    int addNewCourse(AddNewCourseDTO request);
 }

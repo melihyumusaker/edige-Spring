@@ -1,10 +1,13 @@
 package com.alibou.alibou.Service;
 
 import com.alibou.alibou.Core.IServices.IStudentCourseService;
+import com.alibou.alibou.DTO.StudentCourse.AddNewStudentCourseDTO;
 import com.alibou.alibou.DTO.StudentCourse.StudentFinishHomeworkDTO;
 import com.alibou.alibou.Model.Course;
+import com.alibou.alibou.Model.Relation;
 import com.alibou.alibou.Model.Student;
 import com.alibou.alibou.Model.StudentCourse;
+import com.alibou.alibou.Repository.CourseRepository;
 import com.alibou.alibou.Repository.StudentCourseRepository;
 import com.alibou.alibou.Repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,21 +15,42 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class StudentCourseService implements IStudentCourseService {
     private final StudentCourseRepository studentCourseRepository;
+    private final StudentRepository studentRepository;
+    private final CourseRepository courseRepository;
 
     @Autowired
-    public StudentCourseService(StudentCourseRepository studentCourseRepository){
+    public StudentCourseService(StudentCourseRepository studentCourseRepository,StudentRepository studentRepository,CourseRepository courseRepository){
         this.studentCourseRepository = studentCourseRepository;
+        this.studentRepository = studentRepository;
+        this.courseRepository = courseRepository;
     }
 
     public List<StudentCourse> getAllStudentAndCourses(){
         return studentCourseRepository.findAll();
     }
 
+    @Override
+    public void addNewStudentCourse(AddNewStudentCourseDTO request) {
+        Optional<Course> course = courseRepository.findById(request.getCourse_id());
+        Optional<Student> student = studentRepository.findById(request.getStudent_id());
+
+        if(course.isPresent() && student.isPresent()){
+            StudentCourse studentCourse = StudentCourse.builder()
+                    .student_id(student.get())
+                    .course_id(course.get())
+                    .build();
+
+            studentCourseRepository.save(studentCourse);
+
+        }
+
+    }
     public List<Course> getAllCoursesByStudentId(int studentId) {
         try{
             return studentCourseRepository.findAllByStudentId(studentId)
@@ -37,6 +61,7 @@ public class StudentCourseService implements IStudentCourseService {
             throw new RuntimeException("Error while fetching not done courses for student with ID: " + studentId, ex);
         }
     }
+
     public List<Course> getDoneCoursesByStudentIdAndIsHomeworkDone(int studentId) {
        try{
            return studentCourseRepository.findAllByStudentIdAndIsHomeworkDone(studentId)

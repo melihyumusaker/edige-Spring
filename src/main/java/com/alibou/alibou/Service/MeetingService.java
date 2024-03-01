@@ -48,7 +48,6 @@ public class MeetingService implements IMeetingService {
             meetingRepository.save(newMeeting);
             return true;
         } else {
-            // Relation bulunamadı, Meeting oluşturma başarısız
             return false;
         }
     }

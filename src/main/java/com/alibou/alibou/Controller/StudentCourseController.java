@@ -1,6 +1,8 @@
 package com.alibou.alibou.Controller;
 
 import com.alibou.alibou.Core.IServices.IStudentCourseService;
+import com.alibou.alibou.DTO.Course.AddNewCourseDTO;
+import com.alibou.alibou.DTO.StudentCourse.AddNewStudentCourseDTO;
 import com.alibou.alibou.DTO.StudentCourse.GetStudentsCoursesDTO;
 import com.alibou.alibou.DTO.StudentCourse.StudentFinishHomeworkDTO;
 import com.alibou.alibou.Model.Course;
@@ -29,6 +31,16 @@ public class StudentCourseController {
         return studentCourseService.getAllStudentAndCourses();
     }
 
+    @PostMapping("/addNewStudentCourse")
+    public ResponseEntity<?> addNewStudentCourse(@RequestBody AddNewStudentCourseDTO request) {
+        try {
+            studentCourseService.addNewStudentCourse(request);
+           return  ResponseEntity.ok("Öğrenci ve ders ilişkisi eklendi");
+        } catch (RuntimeException e) {
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
     @PostMapping("/get-all-students-courses")
     public ResponseEntity<List<Course>> getAllStudentsCourses(@RequestBody GetStudentsCoursesDTO request) {
