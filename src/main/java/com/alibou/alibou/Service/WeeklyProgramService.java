@@ -99,6 +99,7 @@ public class WeeklyProgramService implements IWeeklyProgramService {
 
         for (WeeklyProgram weeklyProgram : weeklyPrograms) {
             WeeklyProgramDetailsDTO detailsDTO = new WeeklyProgramDetailsDTO();
+            detailsDTO.setWeekly_program_id(weeklyProgram.getWeekly_program_id());
             detailsDTO.setLessonName(weeklyProgram.getLesson_name());
             detailsDTO.setDay(weeklyProgram.getDay());
             detailsDTO.setLessonStartHour(weeklyProgram.getLesson_start_hour());
@@ -113,6 +114,7 @@ public class WeeklyProgramService implements IWeeklyProgramService {
 
     private WeeklyProgram convertToWeeklyProgram(WeeklyProgramDetailsDTO detailsDTO) {
         WeeklyProgram weeklyProgram = new WeeklyProgram();
+        weeklyProgram.setWeekly_program_id(detailsDTO.getWeekly_program_id());
         weeklyProgram.setLesson_name(detailsDTO.getLessonName());
         weeklyProgram.setDay(detailsDTO.getDay());
         weeklyProgram.setLesson_start_hour(detailsDTO.getLessonStartHour());
