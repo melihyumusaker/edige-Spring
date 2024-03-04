@@ -2,7 +2,10 @@ package com.alibou.alibou.Controller;
 
 import com.alibou.alibou.Core.IServices.ICourseService;
 import com.alibou.alibou.DTO.Course.AddNewCourseDTO;
+import com.alibou.alibou.DTO.Course.DeleteCourseDTO;
+import com.alibou.alibou.DTO.Course.UpdateCourseDTO;
 import com.alibou.alibou.DTO.StudentCourse.StudentFinishHomeworkDTO;
+import com.alibou.alibou.DTO.WeeklyProgram.DeleteWeeklyProgramDTO;
 import com.alibou.alibou.Model.Course;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,6 +49,29 @@ public class CourseController {
         } catch (RuntimeException e) {
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    @PutMapping("/updateCourse")
+    public ResponseEntity<?> updateCourse(@RequestBody UpdateCourseDTO request) {
+        try {
+
+            boolean isUpdated = courseService.updateCourse(request);
+            if (isUpdated) {
+                return ResponseEntity.ok("Course updated successfully");
+            } else {
+                return ResponseEntity.badRequest().body("Course not found or invalid data");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Course güncellenirken bir hata oluştu: " + e.getMessage());
+        }
+    }
+    @DeleteMapping("/deleteCourse")
+    public ResponseEntity<?> deleteCourse(@RequestBody DeleteCourseDTO request) {
+        try {
+            courseService.deleteCourse(request);
+            return ResponseEntity.ok("Course silindi");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Course silerken bir hata oluştu: " + e.getMessage());
         }
     }
 

@@ -11,4 +11,6 @@ public interface IWeeklyProgramService {
     boolean updateWeeklyProgram(UpdateWeeklyProgramDTO request);
     List<WeeklyProgram> getWeeklyProgramByStudentId(GetWeeklyProgramByStudentIdWithRequestBodyDTO request);
     Optional<List<WeeklyProgramDetailsDTO>> findStudentWeeklyProgramByParentId(GetParentChildWeeklyProgramDTO request);
+
+    void deleteWeeklyProgram(DeleteWeeklyProgramDTO request);
 }

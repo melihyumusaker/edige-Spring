@@ -15,6 +15,7 @@ import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -57,6 +58,23 @@ public class WeeklyProgramService implements IWeeklyProgramService {
             return true; // Başarılı ekleme
         } else {
             return false; // Öğrenci bulunamadı
+        }
+    }
+
+    @Override
+    public void deleteWeeklyProgram(DeleteWeeklyProgramDTO request) {
+        int weeklyProgramId = request.getWeekly_program_id();
+
+        Optional<WeeklyProgram> optionalWeeklyProgram = weeklyProgramRepository.findById(weeklyProgramId);
+
+        try {
+            if (optionalWeeklyProgram.isPresent()) {
+                weeklyProgramRepository.deleteById(weeklyProgramId);
+            } else {
+                throw new NoSuchElementException("Haftalık program bulunamadı.");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Haftalık program silinirken bir hata oluştu: " + e.getMessage());
         }
     }
 
@@ -139,6 +157,8 @@ public class WeeklyProgramService implements IWeeklyProgramService {
             return Optional.empty();
         }
     }
+
+
 
     private WeeklyProgramDetailsDTO convertToDTO(WeeklyProgram weeklyProgram) {
         WeeklyProgramDetailsDTO detailsDTO = new WeeklyProgramDetailsDTO();

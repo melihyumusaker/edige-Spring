@@ -10,6 +10,7 @@ import com.alibou.alibou.Model.WeeklyProgram;
 import com.alibou.alibou.Service.TeacherService;
 import com.alibou.alibou.Service.WeeklyProgramService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,7 +69,6 @@ public class WeeklyProgramController {
         }
     }
 
-    // parent öğrencinin ders programını görüntüleyebilecek
     @PostMapping("/getParentChildWeeklyProgram")
     public ResponseEntity<?> getParentChildWeeklyProgram(@RequestBody GetParentChildWeeklyProgramDTO request) {
         Optional<List<WeeklyProgramDetailsDTO>> weeklyProgramDetails = weeklyProgramService.findStudentWeeklyProgramByParentId(request);
@@ -77,6 +77,16 @@ public class WeeklyProgramController {
             return ResponseEntity.ok(weeklyProgramDetails.get());
         } else {
             return ResponseEntity.badRequest().body("No weekly program found for the given parent ID");
+        }
+    }
+
+    @DeleteMapping("/deleteWeeklyProgram")
+    public ResponseEntity<?> deleteWeeklyProgram(@RequestBody DeleteWeeklyProgramDTO request) {
+        try {
+            weeklyProgramService.deleteWeeklyProgram(request);
+            return ResponseEntity.ok("Weekly program silindi");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Haftalık programı silerken bir hata oluştu: " + e.getMessage());
         }
     }
 

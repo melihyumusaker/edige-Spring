@@ -34,11 +34,19 @@ public class SecurityConfiguration {
                         .permitAll()
                         .requestMatchers(
                                 "/students/**" , "/parents/**","/api/v1/auth/signup-student"
-                                ,"/meetings/**" ,  "/relations/**" ,  "/teachers/**" ,  "/trial-exams/**" , "/weekly-programs/**", "/users/**"
+                                ,"/meetings/**" ,  "/relations/**" ,  "/teachers/**" ,  "/trial-exams/**" , "/users/**"
                                 ).permitAll()
-                        .requestMatchers("/course/studentFinishHomework").permitAll()
-                        .requestMatchers("/course/addNewCourse").hasAnyAuthority(Role.TEACHER.name())
+                        .requestMatchers("/courses/studentFinishHomework").permitAll()
+                        .requestMatchers("/courses/addNewCourse").hasAnyAuthority(Role.TEACHER.name())
+                        .requestMatchers("/courses/deleteCourse").hasAnyAuthority(Role.TEACHER.name())
+                        .requestMatchers("/courses/updateCourse").hasAnyAuthority(Role.TEACHER.name())
                         .requestMatchers("/students-courses/addNewStudentCourse").hasAnyAuthority(Role.TEACHER.name())
+                        .requestMatchers("/weekly-programs/deleteWeeklyProgram").hasAnyAuthority(Role.TEACHER.name())
+                        .requestMatchers("/weekly-programs/all").permitAll()
+                        .requestMatchers("/weekly-programs/createWeeklyProgram").permitAll()
+                        .requestMatchers("/weekly-programs/updateWeeklyProgram").permitAll()
+                        .requestMatchers("/weekly-programs/getWeeklyProgramByStudentId").permitAll()
+                        .requestMatchers("/weekly-programs/getParentChildWeeklyProgram").permitAll()
                         .requestMatchers("/students-courses/get-all-students-courses").permitAll()
                         .requestMatchers("/students-courses/get-students-done-courses").permitAll()
                         .requestMatchers("/students-courses/get-students-not-done-courses").permitAll()
