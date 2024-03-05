@@ -2,6 +2,7 @@ package com.alibou.alibou.Controller;
 
 import com.alibou.alibou.Core.IServices.IStudentService;
 import com.alibou.alibou.Core.IServices.IUserService;
+import com.alibou.alibou.DTO.User.KullaniciDTO;
 import com.alibou.alibou.DTO.User.UserUpdateDTO;
 import com.alibou.alibou.Model.Student;
 import com.alibou.alibou.Model.User;
@@ -49,7 +50,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateUser( @RequestBody UserUpdateDTO updatedUserDetails) {
+    public ResponseEntity<?> updateUser(@RequestBody KullaniciDTO updatedUserDetails) {
         try {
             User updatedUser = userService.updateUser(updatedUserDetails.getUser_id(), updatedUserDetails);
             return ResponseEntity.ok("Güncelleme Başarılı");
@@ -59,5 +60,4 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Bir hata oluştu.");
         }
     }
-
 }

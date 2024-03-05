@@ -3,6 +3,8 @@ package com.alibou.alibou.Controller;
 import com.alibou.alibou.Core.IServices.IStudentService;
 import com.alibou.alibou.Core.IServices.ITrialExamService;
 import com.alibou.alibou.Core.IServices.IUserService;
+import com.alibou.alibou.DTO.Course.DeleteCourseDTO;
+import com.alibou.alibou.DTO.TrialExam.DeleteTrialExamDTO;
 import com.alibou.alibou.DTO.TrialExam.GetStudentTrialExamsByTeacherDTO;
 import com.alibou.alibou.DTO.TrialExam.GetStudentTrialExamsDTO;
 import com.alibou.alibou.DTO.TrialExam.SetTrialExamDTO;
@@ -29,11 +31,6 @@ public class TrialExamController {
         this.trialExamService = trialExamService;
         this.studentService = studentService;
         this.userService = userService;
-    }
-
-    @GetMapping("/all")
-    public List<TrialExam> getAllTrialExams() {
-        return trialExamService.getAllTrialExams();
     }
 
     @PostMapping("/setStudentTrialExamResult")
@@ -70,6 +67,16 @@ public class TrialExamController {
         }
 
         return new ResponseEntity<>(studentTrialExams, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteTrialExam")
+    public ResponseEntity<?> deleteTrialExam(@RequestBody DeleteTrialExamDTO request) {
+        try {
+            trialExamService.deleteTrialExam(request);
+            return ResponseEntity.ok("Trial Exam silindi");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Trial Exam silinirken bir hata oluştu: " + e.getMessage());
+        }
     }
 
 }

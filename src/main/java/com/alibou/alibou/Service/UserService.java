@@ -1,11 +1,13 @@
 package com.alibou.alibou.Service;
 
 import com.alibou.alibou.Core.IServices.IUserService;
+import com.alibou.alibou.DTO.User.KullaniciDTO;
 import com.alibou.alibou.DTO.User.UserUpdateDTO;
 import com.alibou.alibou.Model.User;
 import com.alibou.alibou.Repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,10 +16,12 @@ import java.util.Optional;
 @Service
 public class UserService implements IUserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> getAllUsers() {
@@ -32,11 +36,10 @@ public class UserService implements IUserService {
         userRepository.deactivateUserById(userId);
     }
 
-    public User updateUser(int userId, UserUpdateDTO updatedUserDetails) {
+    public User updateUser(int userId, KullaniciDTO updatedUserDetails) {
         User userToUpdate = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
-        // Güncelleme işlemleri
         if (updatedUserDetails.getName() != null) {
             userToUpdate.setName(updatedUserDetails.getName());
         }
@@ -60,6 +63,12 @@ public class UserService implements IUserService {
         }
         if (updatedUserDetails.getRole() != null) {
             userToUpdate.setRole(updatedUserDetails.getRole());
+        }
+        if(updatedUserDetails.getIs_active() != null){
+            userToUpdate.setIs_active(updatedUserDetails.getIs_active());
+        }
+        if(updatedUserDetails.getPassword() != null){
+            userToUpdate.setPassword(passwordEncoder.encode(updatedUserDetails.getPassword()) );
         }
 
         return userRepository.save(userToUpdate);

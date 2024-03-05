@@ -34,7 +34,7 @@ public class SecurityConfiguration {
                         .permitAll()
                         .requestMatchers(
                                 "/students/**" , "/parents/**","/api/v1/auth/signup-student"
-                                ,"/meetings/**" ,  "/relations/**" ,  "/teachers/**" ,  "/trial-exams/**" , "/users/**"
+                                ,"/meetings/**" ,  "/relations/**" ,  "/teachers/**" , "/users/**"
                                 ).permitAll()
                         .requestMatchers("/courses/studentFinishHomework").permitAll()
                         .requestMatchers("/courses/addNewCourse").hasAnyAuthority(Role.TEACHER.name())
@@ -50,6 +50,10 @@ public class SecurityConfiguration {
                         .requestMatchers("/students-courses/get-all-students-courses").permitAll()
                         .requestMatchers("/students-courses/get-students-done-courses").permitAll()
                         .requestMatchers("/students-courses/get-students-not-done-courses").permitAll()
+                        .requestMatchers("/trial-exams/setStudentTrialExamResult").permitAll()
+                        .requestMatchers("/trial-exams/getStudentTrialExams").permitAll()
+                        .requestMatchers("/trial-exams/getStudentTrialExamsByTeacher").permitAll()
+                        .requestMatchers("/trial-exams/deleteTrialExam").hasAnyAuthority(Role.TEACHER.name())
                         .anyRequest().authenticated())
                 .cors(Customizer.withDefaults())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

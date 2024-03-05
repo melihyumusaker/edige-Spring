@@ -1,5 +1,6 @@
 package com.alibou.alibou.Core.IServices;
 
+import com.alibou.alibou.DTO.User.KullaniciDTO;
 import com.alibou.alibou.DTO.User.UserUpdateDTO;
 import com.alibou.alibou.Model.User;
 
@@ -11,5 +12,5 @@ public interface IUserService {
     List<User> findAllActiveUsers();
     int getUserIdByEmail(String userEmail);
     void deactivateUserById(int userId);
-    User updateUser(int userId, UserUpdateDTO updatedUserDetails);
+    User updateUser(int userId, KullaniciDTO updatedUserDetails);
 }

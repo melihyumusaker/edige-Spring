@@ -1,5 +1,6 @@
 package com.alibou.alibou.Service;
 import com.alibou.alibou.Core.IServices.ITrialExamService;
+import com.alibou.alibou.DTO.TrialExam.DeleteTrialExamDTO;
 import com.alibou.alibou.DTO.TrialExam.GetStudentTrialExamsDTO;
 import com.alibou.alibou.DTO.TrialExam.SetTrialExamDTO;
 import com.alibou.alibou.Model.Student;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -73,8 +75,23 @@ public class TrialExamService implements ITrialExamService {
         }else{
             return false;
         }
+    }
 
+    @Override
+    public void deleteTrialExam(DeleteTrialExamDTO request) {
+        int trialExamId = request.getTrial_exam_id();
 
+        Optional<TrialExam> optionalTrialExam = trialExamRepository.findById(trialExamId);
+
+        try {
+            if (optionalTrialExam.isPresent()) {
+                trialExamRepository.deleteById(trialExamId);
+            } else {
+                throw new NoSuchElementException("Trial Exam bulunamadı.");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
 
     }
 

@@ -82,8 +82,6 @@ public class CourseService implements ICourseService {
         }
     }
 
-
-
     @Override
     public void deleteCourse(DeleteCourseDTO request) {
         int courseId = request.getCourse_id();
