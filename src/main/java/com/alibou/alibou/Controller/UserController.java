@@ -32,10 +32,11 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
     @GetMapping("/getAllActiveUsers")
-    public ResponseEntity<?> getAllActiveUsers() {
-        List<User> activeUsers = userService.findAllActiveUsers();
+    public ResponseEntity<List<KullaniciDTO>> getAllActiveUsers() {
+        List<KullaniciDTO> activeUsers = userService.findAllActiveUsers();
         return ResponseEntity.ok(activeUsers);
     }
+
 
     @PutMapping("/{userId}/deactivate")
     public ResponseEntity<String> deactivateUser(@PathVariable int userId) {

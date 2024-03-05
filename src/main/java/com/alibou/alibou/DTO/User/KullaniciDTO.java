@@ -1,12 +1,12 @@
 package com.alibou.alibou.DTO.User;
 
 import com.alibou.alibou.Core.Roles.Role;
-import jakarta.persistence.*;
 import lombok.Data;
-
+import lombok.Builder;
 import java.util.Date;
 
 @Data
+@Builder
 public class KullaniciDTO {
 
     private int user_id;

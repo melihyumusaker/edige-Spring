@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface IUserService {
     List<User> getAllUsers();
-    List<User> findAllActiveUsers();
+    public List<KullaniciDTO> findAllActiveUsers();
     int getUserIdByEmail(String userEmail);
     void deactivateUserById(int userId);
     User updateUser(int userId, KullaniciDTO updatedUserDetails);

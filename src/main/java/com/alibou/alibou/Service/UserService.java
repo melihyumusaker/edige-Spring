@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,9 +29,31 @@ public class UserService implements IUserService {
         return userRepository.findAll();
     }
 
-    public List<User> findAllActiveUsers() {
-        return userRepository.findAllActiveUsers();
+    public List<KullaniciDTO> findAllActiveUsers() {
+        List<User> users = userRepository.findAllActiveUsers();
+        List<KullaniciDTO> kullaniciDTOList = new ArrayList<>();
+        for (User user : users) {
+            kullaniciDTOList.add(mapToKullaniciDTO(user));
+        }
+        return kullaniciDTOList;
     }
+
+    private KullaniciDTO mapToKullaniciDTO(User user) {
+        return KullaniciDTO.builder()
+                .user_id(user.getUserId())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .birth_date(user.getBirth_date())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .city(user.getCity())
+                .role(user.getRole())
+                .is_active(user.getIs_active())
+                .build();
+    }
+
 
     public void deactivateUserById(int userId) {
         userRepository.deactivateUserById(userId);
