@@ -1,13 +1,11 @@
 package com.alibou.alibou.DTO.Auth;
 
-import com.alibou.alibou.DTO.User.KullaniciDTO;
-import com.alibou.alibou.Model.Student;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-public class SignUpParentRequest {
+public class SignUpAdminRequest {
     private String name;
     private String surname;
     private String email;
@@ -15,5 +13,4 @@ public class SignUpParentRequest {
     private Date birth_date;
     private String phone;
     private String city;
-    private Student student;
 }

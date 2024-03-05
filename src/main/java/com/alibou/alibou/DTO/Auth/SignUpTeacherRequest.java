@@ -14,4 +14,5 @@ public class SignUpTeacherRequest {
     private String city;
     private Date birth_date;
     private String expertise;
+    private String about;
 }

@@ -12,4 +12,5 @@ public interface AuthenticationService  {
     JwtAuthResponse signin(SigninRequest signinRequest);
     JwtAuthResponse refreshToken(RefreshTokenRequest refreshTokenRequest);
 
+    void signupAdmin(SignUpAdminRequest request);
 }

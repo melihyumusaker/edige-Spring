@@ -17,18 +17,26 @@ public class AuthController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/signup-student")
-    public ResponseEntity<User> signup(@RequestBody SignUpRequest signUpRequest){
-        return ResponseEntity.ok(authenticationService.signup(signUpRequest));
+    public ResponseEntity<?> signup(@RequestBody SignUpRequest signUpRequest){
+        authenticationService.signup(signUpRequest);
+        return ResponseEntity.ok("Kayıt başarılı");
     }
 
     @PostMapping("/signup-teacher")
-    public ResponseEntity<User> signupTeacher(@RequestBody SignUpTeacherRequest signUpTeacherRequest){
-        return ResponseEntity.ok(authenticationService.signupTeacher(signUpTeacherRequest));
+    public ResponseEntity<?> signupTeacher(@RequestBody SignUpTeacherRequest signUpTeacherRequest){
+        authenticationService.signupTeacher(signUpTeacherRequest);
+        return ResponseEntity.ok("Ekleme başarılı");
     }
 
     @PostMapping("/signup-parent")
     public ResponseEntity<User> signupParent(@RequestBody SignUpParentRequest signUpParentRequest){
         return ResponseEntity.ok(authenticationService.signupParent(signUpParentRequest));
+    }
+
+    @PostMapping("/signup-admin")
+    public ResponseEntity<?> signupAdmin(@RequestBody SignUpAdminRequest request){
+        authenticationService.signupAdmin(request);
+        return ResponseEntity.ok("Admin Kayıtı Başarılı");
     }
 
     @PostMapping("/signin")

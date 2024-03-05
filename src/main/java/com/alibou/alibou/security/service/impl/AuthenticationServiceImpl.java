@@ -82,6 +82,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setIs_active(1);
         user.setUsername(UsernameGenerator.generateUsername(signUpTeacherRequest.getName(), signUpTeacherRequest.getSurname(),signUpTeacherRequest.getPhone()));
         teacher.setExpertise(signUpTeacherRequest.getExpertise());
+        teacher.setIs_enneagram_test_solved(0);
+        teacher.setAbout(signUpTeacherRequest.getAbout());
+
 
         userRepository.save(user);
 
@@ -156,5 +159,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return jwtAuthResponse;
         }
         return null;
+    }
+
+    @Override
+    public void signupAdmin(SignUpAdminRequest request) {
+        User user = new User();
+
+        user.setEmail(request.getEmail());
+        user.setName(request.getName());
+        user.setSurname(request.getSurname());
+        user.setRole(Role.ADMIN);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setBirth_date(request.getBirth_date());
+        user.setPhone(request.getPhone());
+        user.setCity(request.getCity());
+        user.setIs_active(1);
+        user.setUsername(UsernameGenerator.generateUsername(request.getName(), request.getSurname(),request.getPhone()));
+
+        userRepository.save(user);
     }
 }
