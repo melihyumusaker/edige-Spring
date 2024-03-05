@@ -3,6 +3,7 @@ package com.alibou.alibou.Controller;
 import com.alibou.alibou.Core.IServices.IStudentService;
 import com.alibou.alibou.Core.IServices.IUserService;
 import com.alibou.alibou.DTO.User.KullaniciDTO;
+import com.alibou.alibou.DTO.User.UserDeactiveDTO;
 import com.alibou.alibou.DTO.User.UserUpdateDTO;
 import com.alibou.alibou.Model.Student;
 import com.alibou.alibou.Model.User;
@@ -37,11 +38,10 @@ public class UserController {
         return ResponseEntity.ok(activeUsers);
     }
 
-
-    @PutMapping("/{userId}/deactivate")
-    public ResponseEntity<String> deactivateUser(@PathVariable int userId) {
+    @DeleteMapping("/deactivate")
+    public ResponseEntity<?> deactivateUser(@RequestBody UserDeactiveDTO request) {
         try {
-            userService.deactivateUserById(userId);
+            userService.deactivateUserById(request.getUser_id());
             return ResponseEntity.ok("Kullanıcı pasif hale getirildi.");
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Kullanıcı bulunamadı.");

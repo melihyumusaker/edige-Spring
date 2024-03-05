@@ -56,7 +56,12 @@ public class UserService implements IUserService {
 
 
     public void deactivateUserById(int userId) {
-        userRepository.deactivateUserById(userId);
+        Optional<User> optionalUser = userRepository.findById(userId);
+
+        if(optionalUser.isPresent()){
+            userRepository.deactivateUserById(userId);
+        }
+
     }
 
     public User updateUser(int userId, KullaniciDTO updatedUserDetails) {
