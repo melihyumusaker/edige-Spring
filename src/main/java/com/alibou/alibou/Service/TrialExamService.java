@@ -3,6 +3,7 @@ import com.alibou.alibou.Core.IServices.ITrialExamService;
 import com.alibou.alibou.DTO.TrialExam.DeleteTrialExamDTO;
 import com.alibou.alibou.DTO.TrialExam.GetStudentTrialExamsDTO;
 import com.alibou.alibou.DTO.TrialExam.SetTrialExamDTO;
+import com.alibou.alibou.DTO.TrialExam.TrialExamUpdateDTO;
 import com.alibou.alibou.Model.Student;
 import com.alibou.alibou.Model.TrialExam;
 import com.alibou.alibou.Repository.StudentRepository;
@@ -95,12 +96,47 @@ public class TrialExamService implements ITrialExamService {
 
     }
 
+    @Override
+    public boolean updateTrialExam(TrialExamUpdateDTO request) {
+        Optional<TrialExam> optionalTrialExam = trialExamRepository.findById(request.getTrial_exam_id());
+
+        if (optionalTrialExam.isPresent()) {
+            TrialExam trialExam = optionalTrialExam.get();
+
+            float   turkceNet = request.getTurkce_true() - (request.getTurkce_false() / 4);
+            float   matNet = request.getMat_true() - (request.getMat_false() / 4);
+            float   sosyalNet = request.getSosyal_true() - (request.getSosyal_false() / 4);
+            float   fenNet = request.getFen_true() - (request.getFen_false() / 4);
+            float   net = turkceNet + matNet + sosyalNet + fenNet;
+
+
+            trialExam.setDate(request.getDate());
+            trialExam.setTurkce_true(request.getTurkce_true());
+            trialExam.setTurkce_false(request.getTurkce_false());
+            trialExam.setMat_true(request.getMat_true());
+            trialExam.setMat_false(request.getMat_false());
+            trialExam.setFen_true(request.getFen_true());
+            trialExam.setFen_false(request.getFen_false());
+            trialExam.setSosyal_true(request.getSosyal_true());
+            trialExam.setSosyal_false(request.getSosyal_false());
+            trialExam.setExam_name(request.getExam_name());
+            trialExam.setTurkce_net(turkceNet);
+            trialExam.setSosyal_net(sosyalNet);
+            trialExam.setMat_net(matNet);
+            trialExam.setFen_net(fenNet);
+            trialExam.setNet(net);
+
+            trialExamRepository.save(trialExam);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public List<GetStudentTrialExamsDTO> getAllTrialExamsByStudentId(int studentId) {
 
-
         List<TrialExam> studentTrialExams = trialExamRepository.findAllByStudentId(studentId);
-
-        // DTO'ya dönüşüm işlemi
         return studentTrialExams.stream()
                 .map(this::mapTrialExamToDTO)
                 .collect(Collectors.toList());
@@ -108,6 +144,7 @@ public class TrialExamService implements ITrialExamService {
 
     private GetStudentTrialExamsDTO mapTrialExamToDTO(TrialExam trialExam) {
         GetStudentTrialExamsDTO dto = new GetStudentTrialExamsDTO();
+        dto.setTrial_exam_id(trialExam.getTrial_exam_id());
         dto.setDate(trialExam.getDate());
         dto.setTurkce_true(trialExam.getTurkce_true());
         dto.setTurkce_false(trialExam.getTurkce_false());

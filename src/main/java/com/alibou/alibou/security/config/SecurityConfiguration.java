@@ -53,6 +53,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/trial-exams/setStudentTrialExamResult").permitAll()
                         .requestMatchers("/trial-exams/getStudentTrialExams").permitAll()
                         .requestMatchers("/trial-exams/getStudentTrialExamsByTeacher").permitAll()
+                        .requestMatchers("/trial-exams/updateTrialExam").permitAll()
                         .requestMatchers("/trial-exams/deleteTrialExam").hasAnyAuthority(Role.TEACHER.name())
                         .anyRequest().authenticated())
                 .cors(Customizer.withDefaults())

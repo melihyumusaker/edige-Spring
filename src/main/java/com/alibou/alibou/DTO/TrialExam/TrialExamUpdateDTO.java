@@ -5,7 +5,8 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class GetStudentTrialExamsDTO {
+public class TrialExamUpdateDTO {
+
     private int trial_exam_id;
     private LocalDate date;
     private float turkce_true;
@@ -17,10 +18,4 @@ public class GetStudentTrialExamsDTO {
     private float sosyal_true;
     private float sosyal_false;
     private String exam_name;
-    private float    turkce_net;
-    private float    mat_net;
-    private float    fen_net;
-    private float    sosyal_net;
-    private float net;
-
 }

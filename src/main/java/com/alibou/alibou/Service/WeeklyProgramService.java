@@ -90,7 +90,6 @@ public class WeeklyProgramService implements IWeeklyProgramService {
         if (optionalWeeklyProgram.isPresent()) {
             WeeklyProgram existingWeeklyProgram = optionalWeeklyProgram.get();
 
-            // Güncelleme istenen alanları kontrol et ve güncelle
             if (lessonName != null) {
                 existingWeeklyProgram.setLesson_name(lessonName);
             }

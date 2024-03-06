@@ -4,10 +4,8 @@ import com.alibou.alibou.Core.IServices.IStudentService;
 import com.alibou.alibou.Core.IServices.ITrialExamService;
 import com.alibou.alibou.Core.IServices.IUserService;
 import com.alibou.alibou.DTO.Course.DeleteCourseDTO;
-import com.alibou.alibou.DTO.TrialExam.DeleteTrialExamDTO;
-import com.alibou.alibou.DTO.TrialExam.GetStudentTrialExamsByTeacherDTO;
-import com.alibou.alibou.DTO.TrialExam.GetStudentTrialExamsDTO;
-import com.alibou.alibou.DTO.TrialExam.SetTrialExamDTO;
+import com.alibou.alibou.DTO.TrialExam.*;
+import com.alibou.alibou.DTO.WeeklyProgram.UpdateWeeklyProgramDTO;
 import com.alibou.alibou.Model.TrialExam;
 import com.alibou.alibou.Service.TrialExamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +52,6 @@ public class TrialExamController {
         if (studentTrialExams.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
         return new ResponseEntity<>(studentTrialExams, HttpStatus.OK);
     }
 
@@ -76,6 +73,17 @@ public class TrialExamController {
             return ResponseEntity.ok("Trial Exam silindi");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Trial Exam silinirken bir hata oluştu: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/updateTrialExam")
+    public ResponseEntity<String> updateTrialExam(@RequestBody TrialExamUpdateDTO request){
+        boolean isUpdated = trialExamService.updateTrialExam(request);
+
+        if (isUpdated) {
+            return ResponseEntity.ok("Trial Exam updated successfully");
+        } else {
+            return ResponseEntity.badRequest().body("Trial Exam not found or invalid data");
         }
     }
 
