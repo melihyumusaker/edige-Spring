@@ -5,10 +5,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface UserMessageDeleteHistoryRepository extends JpaRepository<UserMessageDeleteHistory, Integer> {
     @Query("SELECT umdh FROM UserMessageDeleteHistory umdh " +
             "WHERE (umdh.user1_id = :receiverId AND umdh.user2_id = :senderId) " +
             "OR (umdh.user1_id = :senderId AND umdh.user2_id = :receiverId)")
     UserMessageDeleteHistory findByUser1_idAndUser2_idOrUser1_idAndUser2_id(
             @Param("receiverId") int receiverId, @Param("senderId") int senderId);
+
+
+    @Query("SELECT umdh.user2_id FROM UserMessageDeleteHistory umdh WHERE umdh.user1_id = ?1 " +
+            "UNION " +
+            "SELECT umdh.user1_id FROM UserMessageDeleteHistory umdh WHERE umdh.user2_id = ?1")
+    List<Integer> findConnectedUserIds(int userId);
 }

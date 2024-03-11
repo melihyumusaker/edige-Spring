@@ -4,6 +4,7 @@ import com.alibou.alibou.DTO.Message.DeleteAllMessagesDTO;
 import com.alibou.alibou.DTO.Message.MessageDTO;
 import com.alibou.alibou.Model.Message;
 import com.alibou.alibou.Model.Relation;
+import com.alibou.alibou.Model.User;
 
 import java.util.List;
 
@@ -14,4 +15,5 @@ public interface IMessageService {
     List<Message> getMessageHistory(int senderId, int receiverId, int page, int size);
 
     void deleteAllMessages(DeleteAllMessagesDTO request);
+    List<User> findConnectedUserIds(int userId);
 }

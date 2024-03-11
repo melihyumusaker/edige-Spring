@@ -4,7 +4,9 @@ import com.alibou.alibou.Core.IServices.IMessageService;
 import com.alibou.alibou.DTO.Message.DeleteAllMessagesDTO;
 import com.alibou.alibou.DTO.Message.MessageDTO;
 import com.alibou.alibou.DTO.Message.MessageHistoryDTO;
+import com.alibou.alibou.DTO.Message.UserIdRequest;
 import com.alibou.alibou.Model.Message;
+import com.alibou.alibou.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,6 +62,12 @@ public class MessageController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete all messages: " + e.getMessage());
         }
+    }
+
+    @PostMapping("/messageList")
+    public ResponseEntity<?> getConnectedUserIds(@RequestBody UserIdRequest request) {
+        List<User> connectedUsers = messageService.findConnectedUserIds(request.getUser_id());
+        return new ResponseEntity<>(connectedUsers, HttpStatus.OK);
     }
 
 }

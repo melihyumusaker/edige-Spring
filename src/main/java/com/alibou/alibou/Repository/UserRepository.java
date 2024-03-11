@@ -33,4 +33,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "WHERE u.user_id = :userId")
     void updateUser(@Param("userId") int userId, @Param("updatedUser") User updatedUser);
 
+    @Query("SELECT u FROM User u WHERE u.user_id IN ?1")
+    List<User> findByUserIdsIn(List<Integer> userIds);
 }

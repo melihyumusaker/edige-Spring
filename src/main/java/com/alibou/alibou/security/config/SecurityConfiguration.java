@@ -58,6 +58,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/message/createMessage").permitAll()
                         .requestMatchers("/message/messageHistory").permitAll()
                         .requestMatchers("/message/deleteAllMessages").permitAll()
+                        .requestMatchers("/message/messageList").permitAll()
                         .anyRequest().authenticated())
                 .cors(Customizer.withDefaults())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

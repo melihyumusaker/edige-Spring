@@ -4,9 +4,11 @@ import com.alibou.alibou.Core.IServices.IMessageService;
 import com.alibou.alibou.DTO.Message.DeleteAllMessagesDTO;
 import com.alibou.alibou.DTO.Message.MessageDTO;
 import com.alibou.alibou.Model.Message;
+import com.alibou.alibou.Model.User;
 import com.alibou.alibou.Model.UserMessageDeleteHistory;
 import com.alibou.alibou.Repository.MessageRepository;
 import com.alibou.alibou.Repository.UserMessageDeleteHistoryRepository;
+import com.alibou.alibou.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +19,13 @@ import java.util.List;
 public class MessageService implements IMessageService {
     private final MessageRepository messageRepository;
     private final UserMessageDeleteHistoryRepository userMessageDeleteHistoryRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public MessageService(MessageRepository messageRepository, UserMessageDeleteHistoryRepository userMessageDeleteHistoryRepository) {
+    public MessageService(MessageRepository messageRepository, UserMessageDeleteHistoryRepository userMessageDeleteHistoryRepository, UserRepository userRepository) {
         this.messageRepository = messageRepository;
         this.userMessageDeleteHistoryRepository = userMessageDeleteHistoryRepository;
+        this.userRepository = userRepository;
     }
 
 
@@ -110,5 +114,11 @@ public class MessageService implements IMessageService {
             messageRepository.deleteAll(messagesToDelete);
         }
 
+    }
+
+    @Override
+    public List<User> findConnectedUserIds(int userId) {
+        List<Integer> connectedUserIds = userMessageDeleteHistoryRepository.findConnectedUserIds(userId);
+        return userRepository.findByUserIdsIn(connectedUserIds);
     }
 }
