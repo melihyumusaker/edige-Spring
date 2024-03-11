@@ -58,10 +58,10 @@ public class TrialExamController {
     @PostMapping ("/getStudentTrialExamsByTeacher")
     public ResponseEntity<?> getStudentTrialExamsByTeacher(@RequestBody GetStudentTrialExamsByTeacherDTO request){
         List<GetStudentTrialExamsDTO> studentTrialExams = trialExamService.getAllTrialExamsByStudentId(request.getStudent_id());
-
+/*
         if (studentTrialExams.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+            return ResponseEntity.badRequest().body("Trial Exam bulunamadi");
+        }*/
 
         return new ResponseEntity<>(studentTrialExams, HttpStatus.OK);
     }
