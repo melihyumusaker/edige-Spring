@@ -59,7 +59,6 @@ public class TrialExamController {
     public ResponseEntity<?> getStudentTrialExamsByTeacher(@RequestBody GetStudentTrialExamsByTeacherDTO request){
         try {
             List<GetStudentTrialExamsDTO> studentTrialExams = trialExamService.getAllTrialExamsByStudentId(request.getStudent_id());
-
             return new ResponseEntity<>(studentTrialExams, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("An error occurred while processing your request: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
