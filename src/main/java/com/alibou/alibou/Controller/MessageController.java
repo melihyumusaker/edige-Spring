@@ -5,6 +5,7 @@ import com.alibou.alibou.DTO.Message.DeleteAllMessagesDTO;
 import com.alibou.alibou.DTO.Message.MessageDTO;
 import com.alibou.alibou.DTO.Message.MessageHistoryDTO;
 import com.alibou.alibou.DTO.Message.UserIdRequest;
+import com.alibou.alibou.DTO.User.KullaniciDTO;
 import com.alibou.alibou.Model.Message;
 import com.alibou.alibou.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class MessageController {
 
             return ResponseEntity.ok(messageHistory);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
@@ -66,7 +67,7 @@ public class MessageController {
 
     @PostMapping("/messageList")
     public ResponseEntity<?> getConnectedUserIds(@RequestBody UserIdRequest request) {
-        List<User> connectedUsers = messageService.findConnectedUserIds(request.getUser_id());
+        List<KullaniciDTO> connectedUsers = messageService.findConnectedUserIds(request.getUser_id());
         return new ResponseEntity<>(connectedUsers, HttpStatus.OK);
     }
 

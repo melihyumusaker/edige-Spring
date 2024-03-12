@@ -3,6 +3,7 @@ package com.alibou.alibou.Service;
 import com.alibou.alibou.Core.IServices.IMessageService;
 import com.alibou.alibou.DTO.Message.DeleteAllMessagesDTO;
 import com.alibou.alibou.DTO.Message.MessageDTO;
+import com.alibou.alibou.DTO.User.KullaniciDTO;
 import com.alibou.alibou.Model.Message;
 import com.alibou.alibou.Model.User;
 import com.alibou.alibou.Model.UserMessageDeleteHistory;
@@ -12,6 +13,7 @@ import com.alibou.alibou.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -50,6 +52,10 @@ public class MessageService implements IMessageService {
                     .is_user2_deleted(false)
                     .build();
 
+            userMessageDeleteHistoryRepository.save(messageDeleteHistory);
+        }else{
+            messageDeleteHistory.set_user1_deleted(false);
+            messageDeleteHistory.set_user2_deleted(false);
             userMessageDeleteHistoryRepository.save(messageDeleteHistory);
         }
 
@@ -113,12 +119,33 @@ public class MessageService implements IMessageService {
                     messageRepository.findBySenderIdAndReceiverIdOrSenderIdAndReceiverId(senderId, receiverId,receiverId ,senderId  );
             messageRepository.deleteAll(messagesToDelete);
         }
-
     }
 
     @Override
-    public List<User> findConnectedUserIds(int userId) {
+    public  List<KullaniciDTO> findConnectedUserIds(int userId) {
         List<Integer> connectedUserIds = userMessageDeleteHistoryRepository.findConnectedUserIds(userId);
-        return userRepository.findByUserIdsIn(connectedUserIds);
+         List<User> users = userRepository.findByUserIdsIn(connectedUserIds);
+        List<KullaniciDTO> kullaniciDTOList = new ArrayList<>();
+        for (User user : users) {
+            kullaniciDTOList.add(mapToKullaniciDTO(user));
+        }
+        return kullaniciDTOList;
+
+    }
+
+    private KullaniciDTO mapToKullaniciDTO(User user) {
+        return KullaniciDTO.builder()
+                .user_id(user.getUserId())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .birth_date(user.getBirth_date())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .city(user.getCity())
+                .role(user.getRole())
+                .is_active(user.getIs_active())
+                .build();
     }
 }

@@ -15,8 +15,8 @@ public interface UserMessageDeleteHistoryRepository extends JpaRepository<UserMe
             @Param("receiverId") int receiverId, @Param("senderId") int senderId);
 
 
-    @Query("SELECT umdh.user2_id FROM UserMessageDeleteHistory umdh WHERE umdh.user1_id = ?1 " +
+    @Query("SELECT umdh.user2_id FROM UserMessageDeleteHistory umdh WHERE umdh.user1_id = :userId AND umdh.is_user1_deleted = false " +
             "UNION " +
-            "SELECT umdh.user1_id FROM UserMessageDeleteHistory umdh WHERE umdh.user2_id = ?1")
-    List<Integer> findConnectedUserIds(int userId);
+            "SELECT umdh.user1_id FROM UserMessageDeleteHistory umdh WHERE umdh.user2_id = :userId AND umdh.is_user2_deleted = false")
+    List<Integer> findConnectedUserIds(@Param("userId") int userId);
 }
