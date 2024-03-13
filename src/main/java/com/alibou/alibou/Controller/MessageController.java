@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -48,6 +49,8 @@ public class MessageController {
             }
 
             List<Message> messageHistory = messageService.getMessageHistory(senderId, receiverId, page, size);
+
+            Collections.reverse(messageHistory);
 
             return ResponseEntity.ok(messageHistory);
         } catch (Exception e) {
