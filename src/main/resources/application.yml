@@ -13,3 +13,6 @@ spring:
         format_sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
+
+openai:
+  key: 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

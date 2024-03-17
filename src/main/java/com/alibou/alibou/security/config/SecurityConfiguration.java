@@ -34,7 +34,7 @@ public class SecurityConfiguration {
                         .permitAll()
                         .requestMatchers(
                                 "/students/**" , "/parents/**","/api/v1/auth/signup-student"
-                                ,"/meetings/**" ,  "/relations/**" ,  "/teachers/**" , "/users/**"
+                                ,"/meetings/**" ,  "/relations/**" ,  "/teachers/**" , "/users/**" , "/gpt/**"
                                 ).permitAll()
                         .requestMatchers("/courses/studentFinishHomework").permitAll()
                         .requestMatchers("/courses/addNewCourse").hasAnyAuthority(Role.TEACHER.name())
