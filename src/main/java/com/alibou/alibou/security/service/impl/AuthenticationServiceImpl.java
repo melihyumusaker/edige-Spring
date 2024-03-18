@@ -11,14 +11,22 @@ import com.alibou.alibou.Repository.ParentRepository;
 import com.alibou.alibou.Repository.StudentRepository;
 import com.alibou.alibou.Repository.TeacherRepository;
 import com.alibou.alibou.Repository.UserRepository;
+import com.alibou.alibou.Service.StudentService;
+import com.alibou.alibou.Service.TeacherService;
 import com.alibou.alibou.security.service.AuthenticationService;
 import com.alibou.alibou.security.service.JWTService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Key;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +42,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final StudentRepository studentRepository;
     private final TeacherRepository teacherRepository;
     private final ParentRepository parentRepository;
+    private final StudentService studentService;
+    private final TeacherService teacherService;
+
     @Override
     public User signup(SignUpRequest signUpRequest) {
         User user = new User();
@@ -177,5 +188,40 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setUsername(UsernameGenerator.generateUsername(request.getName(), request.getSurname(),request.getPhone()));
 
         userRepository.save(user);
+    }
+
+    @Override
+    public Object webSignin(SigninRequest signinRequest) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinRequest.getEmail(),
+                signinRequest.getPassword()));
+
+        var user = userRepository.findByEmail(signinRequest.getEmail()).orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+        var jwt = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(new HashMap<>() , user);
+
+        JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
+
+        jwtAuthResponse.setToken(jwt);
+        jwtAuthResponse.setRefreshToken(refreshToken);
+
+        if(user.getRole() == Role.TEACHER){
+            Teacher teacher = teacherService.getTeacherByUserId(user.getUserId());
+            WebTeacherResponse webTeacherResponse = new WebTeacherResponse();
+            webTeacherResponse.setTeacher(teacher);
+            webTeacherResponse.setToken(jwt);
+            webTeacherResponse.setRefreshToken(refreshToken);
+
+            return webTeacherResponse;
+        }
+        else if(user.getRole() == Role.STUDENT){
+            Student student = studentService.getStudentByUserId(user.getUserId());
+            WebStudentResponse webStudentResponse = new WebStudentResponse();
+            webStudentResponse.setStudent(student);
+            webStudentResponse.setToken(jwt);
+            webStudentResponse.setRefreshToken(refreshToken);
+
+            return webStudentResponse;
+        }
+        else return null;
     }
 }

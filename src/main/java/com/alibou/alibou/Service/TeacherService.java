@@ -44,6 +44,16 @@ public class TeacherService implements ITeacherService {
     }
 
     @Override
+    public Teacher getTeacherByUserId(int userId) {
+        Teacher teacher = teacherRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Öğretmen bulunamadı: " + userId));
+
+        if(teacher != null){
+            return teacher;
+        }else return null;
+    }
+
+    @Override
     public List<Teacher> getTeachersByStudentType(String studentType) {
         List<Teacher> teachers = teacherRepository.findTeachersByStudentType(studentType);
         Collections.shuffle(teachers);

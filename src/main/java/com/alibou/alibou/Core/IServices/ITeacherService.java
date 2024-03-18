@@ -14,4 +14,5 @@ public interface ITeacherService {
     Teacher getTeacherDetails(int teacherId);
 
     boolean updateTeacherAboutAndEnneagramTestSolved(UpdateTeacherEnneagramTypeAndAboutDTO request, int teacherId);
+    Teacher getTeacherByUserId(int userId);
 }

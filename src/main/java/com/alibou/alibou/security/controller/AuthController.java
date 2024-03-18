@@ -44,6 +44,11 @@ public class AuthController {
         return ResponseEntity.ok(authenticationService.signin(signinRequest));
     }
 
+    @PostMapping("/webSignin")
+    public ResponseEntity<?> webSignin(@RequestBody SigninRequest signinRequest){
+        return ResponseEntity.ok(authenticationService.webSignin(signinRequest));
+    }
+
     @PostMapping("/refresh")
     public ResponseEntity<JwtAuthResponse> refresh(@RequestBody RefreshTokenRequest refreshTokenRequest){
         return ResponseEntity.ok(authenticationService.refreshToken(refreshTokenRequest));

@@ -13,4 +13,6 @@ public interface AuthenticationService  {
     JwtAuthResponse refreshToken(RefreshTokenRequest refreshTokenRequest);
 
     void signupAdmin(SignUpAdminRequest request);
+
+    Object webSignin(SigninRequest signinRequest);
 }

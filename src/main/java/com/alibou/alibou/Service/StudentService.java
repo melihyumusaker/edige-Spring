@@ -77,6 +77,18 @@ public class StudentService implements IStudentService {
         return student.getStudent_id();
     }
 
+    public Student getStudentByUserId(int userId) {
+        Student student = studentRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Öğrenci bulunamadı: " + userId));
+
+        if(student != null){
+            return student;
+        }else{
+            return null;
+        }
+
+    }
+
     public void setEnneagramTestSolved(int studentId) {
         Optional<Student> studentOptional = studentRepository.findById(studentId);
         if (studentOptional.isPresent()) {
