@@ -37,14 +37,15 @@ public class WeeklyProgramController {
     }
 
     @PostMapping("/createWeeklyProgram")
-    public ResponseEntity<String> createWeeklyProgram(@RequestBody CreateWeeklyProgramDTO request){
+    public ResponseEntity<?> createWeeklyProgram(@RequestBody CreateWeeklyProgramDTO request){
         boolean isCreated = weeklyProgramService.createWeeklyProgram(request);
 
         if (isCreated) {
-            return ResponseEntity.ok("Weekly program created successfully");
+            return ResponseEntity.ok("");
         } else {
             return ResponseEntity.badRequest().body("Student not found or invalid data");
         }
+
     }
 
     @PutMapping("/updateWeeklyProgram")
@@ -52,9 +53,9 @@ public class WeeklyProgramController {
         boolean isUpdated = weeklyProgramService.updateWeeklyProgram(request);
 
         if (isUpdated) {
-            return ResponseEntity.ok("Weekly program updated successfully");
+            return ResponseEntity.ok("");
         } else {
-            return ResponseEntity.badRequest().body("Weekly program not found or invalid data");
+            return ResponseEntity.badRequest().body("");
         }
     }
 
@@ -84,7 +85,7 @@ public class WeeklyProgramController {
     public ResponseEntity<?> deleteWeeklyProgram(@RequestBody DeleteWeeklyProgramDTO request) {
         try {
             weeklyProgramService.deleteWeeklyProgram(request);
-            return ResponseEntity.ok("Weekly program silindi");
+            return ResponseEntity.ok("");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Haftalık programı silerken bir hata oluştu: " + e.getMessage());
         }

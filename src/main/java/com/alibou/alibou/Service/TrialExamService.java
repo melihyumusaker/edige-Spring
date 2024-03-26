@@ -136,7 +136,7 @@ public class TrialExamService implements ITrialExamService {
 
     public List<GetStudentTrialExamsDTO> getAllTrialExamsByStudentId(int studentId) {
 
-        List<TrialExam> studentTrialExams = trialExamRepository.findAllByStudentId(studentId);
+        List<TrialExam> studentTrialExams = trialExamRepository.findAllByStudentIdOrderByDateAsc(studentId);
         return studentTrialExams.stream()
                 .map(this::mapTrialExamToDTO)
                 .collect(Collectors.toList());
