@@ -37,7 +37,7 @@ public class WeeklyProgramController {
     }
 
     @PostMapping("/createWeeklyProgram")
-    public ResponseEntity<String> createWeeklyProgram(@RequestBody CreateWeeklyProgramDTO request){
+    public ResponseEntity<?> createWeeklyProgram(@RequestBody CreateWeeklyProgramDTO request){
         boolean isCreated = weeklyProgramService.createWeeklyProgram(request);
 
         if (isCreated) {
@@ -45,6 +45,7 @@ public class WeeklyProgramController {
         } else {
             return ResponseEntity.badRequest().body("");
         }
+
     }
 
     @PutMapping("/updateWeeklyProgram")

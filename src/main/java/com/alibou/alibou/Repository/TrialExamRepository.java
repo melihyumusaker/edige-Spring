@@ -12,5 +12,8 @@ public interface TrialExamRepository extends JpaRepository<TrialExam , Integer> 
     @Query("SELECT te FROM TrialExam te WHERE te.student_id.student_id = :student_id")
     List<TrialExam> findAllByStudentId(@Param("student_id") int student_id);
 
+    @Query("SELECT te FROM TrialExam te WHERE te.student_id.student_id = :studentId ORDER BY te.date DESC")
+    List<TrialExam> findAllByStudentIdOrderByDateAsc(int studentId);
+
 }
 

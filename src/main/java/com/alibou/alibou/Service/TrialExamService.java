@@ -44,10 +44,13 @@ public class TrialExamService implements ITrialExamService {
         float   fenTrue = request.getFen_true();
         float   fenFalse = request.getFen_false();
 
-        float   turkceNet = turkceTrue - (turkceFalse / 4);
-        float   matNet = matTrue - (matFalse / 4);
-        float   sosyalNet = sosyalTrue - (sosyalFalse / 4);
-        float   fenNet = fenTrue - (fenFalse / 4);
+        float   turkceNet = turkceTrue - (turkceFalse / 4.0f);
+        float   matNet = matTrue - (matFalse / 4.0f);
+        float   sosyalNet = sosyalTrue - (sosyalFalse / 4.0f);
+        float   fenNet = fenTrue - (fenFalse / 4.0f);
+
+        System.out.println( "sosyal net : " + sosyalNet + " " + fenNet);
+
         float   net = turkceNet + matNet + sosyalNet + fenNet;
 
         Optional<Student> optionalStudent = studentRepository.findById(request.getStudent_id());
@@ -66,12 +69,11 @@ public class TrialExamService implements ITrialExamService {
             trialExam.setDate(request.getDate());
             trialExam.setTurkce_net(turkceNet);
             trialExam.setMat_net(matNet);
-            trialExam.setFen_net(sosyalNet);
-            trialExam.setSosyal_net(fenNet);
+            trialExam.setFen_net(fenNet);
+            trialExam.setSosyal_net(sosyalNet);
             trialExam.setNet(net);
 
             trialExamRepository.save(trialExam);
-
             return true;
         }else{
             return false;
@@ -136,7 +138,7 @@ public class TrialExamService implements ITrialExamService {
 
     public List<GetStudentTrialExamsDTO> getAllTrialExamsByStudentId(int studentId) {
 
-        List<TrialExam> studentTrialExams = trialExamRepository.findAllByStudentId(studentId);
+        List<TrialExam> studentTrialExams = trialExamRepository.findAllByStudentIdOrderByDateAsc(studentId);
         return studentTrialExams.stream()
                 .map(this::mapTrialExamToDTO)
                 .collect(Collectors.toList());
