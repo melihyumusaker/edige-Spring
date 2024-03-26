@@ -57,7 +57,7 @@ public class CourseController {
 
             boolean isUpdated = courseService.updateCourse(request);
             if (isUpdated) {
-                return ResponseEntity.ok("Course updated successfully");
+                return ResponseEntity.ok("");
             } else {
                 return ResponseEntity.badRequest().body("Course not found or invalid data");
             }
@@ -69,7 +69,7 @@ public class CourseController {
     public ResponseEntity<?> deleteCourse(@RequestBody DeleteCourseDTO request) {
         try {
             courseService.deleteCourse(request);
-            return ResponseEntity.ok("Course silindi");
+            return ResponseEntity.ok("");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Course silerken bir hata oluştu: " + e.getMessage());
         }
