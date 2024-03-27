@@ -1,6 +1,7 @@
 package com.alibou.alibou.Service;
 
 import com.alibou.alibou.Core.IServices.IStudentCourseService;
+import com.alibou.alibou.DTO.StudentCourse.AddNewStudentCourseAndCourseDTO;
 import com.alibou.alibou.DTO.StudentCourse.AddNewStudentCourseDTO;
 import com.alibou.alibou.DTO.StudentCourse.StudentFinishHomeworkDTO;
 import com.alibou.alibou.Model.Course;
@@ -51,6 +52,35 @@ public class StudentCourseService implements IStudentCourseService {
         }
 
     }
+
+    @Override
+    public void addNewStudentCourseAndCourse(AddNewStudentCourseAndCourseDTO request) {
+            Course course = Course.builder()
+                    .course_name(request.getCourse_name())
+                    .subcourse_name(request.getSubcourse_name())
+                    .student_comment("")
+                    .homework_description(request.getHomework_description())
+                    .is_homework_done(0)
+                    .homework_deadline(request.getHomework_deadline())
+                    .build();
+
+            courseRepository.save(course);
+
+            int newCourseId = course.getCourse_id();
+
+        Optional<Course> newCourse = courseRepository.findById(newCourseId);
+        Optional<Student> student = studentRepository.findById(request.getStudent_id());
+
+        if(newCourse.isPresent() && student.isPresent()){
+            StudentCourse studentCourse = StudentCourse.builder()
+                    .student_id(student.get())
+                    .course_id(newCourse.get())
+                    .build();
+
+            studentCourseRepository.save(studentCourse);
+        }
+    }
+
     public List<Course> getAllCoursesByStudentId(int studentId) {
         try{
             return studentCourseRepository.findAllByStudentId(studentId)
