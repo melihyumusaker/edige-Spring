@@ -35,7 +35,7 @@ public class SecurityConfiguration {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:3000");
-        config.addAllowedOrigin("http://localhost:55464");
+        config.addAllowedOrigin("http://localhost:50785");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
@@ -65,7 +65,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/students-courses/get-all-students-courses").permitAll()
                         .requestMatchers("/students-courses/get-students-done-courses").permitAll()
                         .requestMatchers("/students-courses/get-students-not-done-courses").permitAll()
-                        .requestMatchers("/students-courses/addNewStudentCourseAndCourse").hasAnyAuthority(Role.STUDENT.name())
+                        .requestMatchers("/students-courses/addNewStudentCourseAndCourse").hasAnyAuthority(Role.TEACHER.name())
                         .requestMatchers("/trial-exams/setStudentTrialExamResult").permitAll()
                         .requestMatchers("/trial-exams/getStudentTrialExams").permitAll()
                         .requestMatchers("/trial-exams/getStudentTrialExamsByTeacher").permitAll()
@@ -76,6 +76,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/message/deleteAllMessages").hasAnyAuthority(Role.TEACHER.name() , Role.ADMIN.name() , Role.STUDENT.name() , Role.PARENT.name())
                         .requestMatchers("/message/messageList").hasAnyAuthority(Role.TEACHER.name() , Role.ADMIN.name() , Role.STUDENT.name() , Role.PARENT.name())
                         .requestMatchers("/qrSettings/generateQRCode").hasAnyAuthority(Role.STUDENT.name())
+                        .requestMatchers("/qrSettings/saveStudentRecords").hasAnyAuthority(Role.STUDENT.name())
                         .anyRequest().authenticated())
                 .cors(Customizer.withDefaults())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
