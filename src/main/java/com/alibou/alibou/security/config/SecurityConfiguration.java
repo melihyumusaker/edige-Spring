@@ -76,7 +76,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/message/deleteAllMessages").hasAnyAuthority(Role.TEACHER.name() , Role.ADMIN.name() , Role.STUDENT.name() , Role.PARENT.name())
                         .requestMatchers("/message/messageList").hasAnyAuthority(Role.TEACHER.name() , Role.ADMIN.name() , Role.STUDENT.name() , Role.PARENT.name())
                         .requestMatchers("/qrSettings/generateQRCode").hasAnyAuthority(Role.STUDENT.name())
-                        .requestMatchers("/qrSettings/saveStudentRecords").hasAnyAuthority(Role.STUDENT.name())
+                        .requestMatchers("/qrSettings/saveStudentRecords").permitAll()
                         .anyRequest().authenticated())
                 .cors(Customizer.withDefaults())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
