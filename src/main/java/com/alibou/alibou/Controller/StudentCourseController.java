@@ -54,7 +54,7 @@ public class StudentCourseController {
         }
     }
 
-    @PostMapping("/get-all-students-courses")
+    @PostMapping(path = "/get-all-students-courses" , produces = "application/json;charset=UTF-8")
     public ResponseEntity<List<Course>> getAllStudentsCourses(@RequestBody GetStudentsCoursesDTO request) {
         try {
             List<Course> courses = studentCourseService.getAllCoursesByStudentId(request.getStudent_id());
@@ -63,7 +63,7 @@ public class StudentCourseController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-    @PostMapping("/get-students-done-courses")
+    @PostMapping(path = "/get-students-done-courses", produces = "application/json;charset=UTF-8")
     public ResponseEntity<List<Course>> getStudentsDoneCourses(@RequestBody GetStudentsCoursesDTO request) {
         try {
             List<Course> courses = studentCourseService.getDoneCoursesByStudentIdAndIsHomeworkDone(request.getStudent_id());
@@ -73,7 +73,7 @@ public class StudentCourseController {
         }
     }
 
-    @PostMapping("/get-students-not-done-courses")
+    @PostMapping(path = "/get-students-not-done-courses" , produces = "application/json;charset=UTF-8")
     public ResponseEntity<List<Course>> getStudentsNotDoneCourses(@RequestBody GetStudentsCoursesDTO request) {
         try {
             List<Course> courses = studentCourseService.getNotDoneCoursesByStudentIdAndIsHomeworkDone(request.getStudent_id());

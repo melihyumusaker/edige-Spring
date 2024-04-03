@@ -36,7 +36,7 @@ public class TeacherController {
         return teacherService.getAllTeachers();
     }
 
-    @GetMapping("/showStudents")
+    @GetMapping(path = "/showStudents", produces = "application/json;charset=UTF-8")
     public ResponseEntity<List<Student>> showStudents() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
@@ -63,7 +63,7 @@ public class TeacherController {
         }
     }
 
-    @PostMapping("/getTeachersByStudentType")
+    @PostMapping(path = "/getTeachersByStudentType", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getTeachersByStudentType(@RequestBody GetTeachersByStudentTypeDTO request) {
         try {
             List<Teacher> teachers = teacherService.getTeachersByStudentType(request.getStudentType());
@@ -78,7 +78,7 @@ public class TeacherController {
         }
     }
 
-    @PostMapping("/getTeacherInfo")
+    @PostMapping(path = "/getTeacherInfo", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getTeacherInfo() {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -36,7 +36,7 @@ public class MessageController {
         }
     }
 
-    @PostMapping("/messageHistory")
+    @PostMapping(path = "/messageHistory" ,  produces = "application/json;charset=UTF-8")
     public ResponseEntity<List<Message>> getMessageHistory(@RequestBody MessageHistoryDTO requestDTO) {
         try {
             int senderId = requestDTO.getSenderId();
@@ -68,7 +68,7 @@ public class MessageController {
         }
     }
 
-    @PostMapping("/messageList")
+    @PostMapping(path = "/messageList" ,  produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getConnectedUserIds(@RequestBody UserIdRequest request) {
         List<KullaniciDTO> connectedUsers = messageService.findConnectedUserIds(request.getUser_id());
         return new ResponseEntity<>(connectedUsers, HttpStatus.OK);

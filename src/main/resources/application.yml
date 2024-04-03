@@ -13,6 +13,11 @@ spring:
         format_sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
+  cache:
+    cache-names: lessons
+    caffeine:
+      spec: maximumSize=500, expireAfterAccess = 60m
 
 openai:
   key: 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
+

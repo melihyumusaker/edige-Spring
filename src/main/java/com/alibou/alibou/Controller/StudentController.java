@@ -35,7 +35,7 @@ public class StudentController {
         return studentService.getAllStudents();
     }
 
-    @PostMapping("/getStudentById")
+    @PostMapping(path = "/getStudentById", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getStudentById(@RequestBody GetStudentByIdRequestDTO request) {
         int student_id = request.getStudent_id();
 

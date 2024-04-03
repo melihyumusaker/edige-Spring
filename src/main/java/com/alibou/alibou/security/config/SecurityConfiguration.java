@@ -1,4 +1,7 @@
 package com.alibou.alibou.security.config;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -21,9 +24,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.concurrent.TimeUnit;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableCaching
 public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -48,7 +54,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**")
                         .permitAll()
                         .requestMatchers(
-                                "/students/**" , "/parents/**","/api/v1/auth/signup-student"
+                                "/students/**" , "/parents/**","/api/v1/auth/signup-student" , "/lessons/**"
                                 ,"/meetings/**" ,  "/relations/**" ,  "/teachers/**" , "/users/**" , "/gpt/**"
                                 ).permitAll()
                         .requestMatchers("/courses/studentFinishHomework").permitAll()
@@ -94,6 +100,7 @@ public class SecurityConfiguration {
         return authenticationProvider;
     }
 
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -102,5 +109,14 @@ public class SecurityConfiguration {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
         return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public CaffeineCacheManager cacheManager() {
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager("lessons");
+        cacheManager.setCaffeine(Caffeine.newBuilder()
+                .expireAfterWrite(1, TimeUnit.DAYS)
+                .maximumSize(1000));
+        return cacheManager;
     }
 }
