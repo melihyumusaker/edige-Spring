@@ -59,7 +59,7 @@ public class WeeklyProgramController {
         }
     }
 
-    @PostMapping("/getWeeklyProgramByStudentId")
+    @PostMapping(path = "/getWeeklyProgramByStudentId", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getWeeklyProgramByStudentIdWithRequestBody(@RequestBody GetWeeklyProgramByStudentIdWithRequestBodyDTO request) {
         List<WeeklyProgram> studentWeeklyProgram = weeklyProgramService.getWeeklyProgramByStudentId(request);
 
@@ -70,7 +70,7 @@ public class WeeklyProgramController {
         }
     }
 
-    @PostMapping("/getParentChildWeeklyProgram")
+    @PostMapping(path = "/getParentChildWeeklyProgram", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getParentChildWeeklyProgram(@RequestBody GetParentChildWeeklyProgramDTO request) {
         Optional<List<WeeklyProgramDetailsDTO>> weeklyProgramDetails = weeklyProgramService.findStudentWeeklyProgramByParentId(request);
 

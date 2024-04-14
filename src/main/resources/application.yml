@@ -17,3 +17,7 @@ openai:
   key: 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
 server:
   port: 9090
+  cache:
+    cache-names: lessons
+    caffeine:
+      spec: maximumSize=500, expireAfterAccess = 60m

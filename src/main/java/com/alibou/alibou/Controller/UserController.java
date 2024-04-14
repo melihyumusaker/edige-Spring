@@ -32,7 +32,7 @@ public class UserController {
         List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
-    @GetMapping("/getAllActiveUsers")
+    @GetMapping(path = "/getAllActiveUsers", produces = "application/json;charset=UTF-8")
     public ResponseEntity<List<KullaniciDTO>> getAllActiveUsers() {
         List<KullaniciDTO> activeUsers = userService.findAllActiveUsers();
         return ResponseEntity.ok(activeUsers);

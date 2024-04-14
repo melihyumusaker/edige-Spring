@@ -41,7 +41,7 @@ public class TrialExamController {
         }
     }
 
-    @GetMapping ("/getStudentTrialExams")
+    @GetMapping (path = "/getStudentTrialExams", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getStudentTrialExams(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
@@ -55,7 +55,7 @@ public class TrialExamController {
         return new ResponseEntity<>(studentTrialExams, HttpStatus.OK);
     }
 
-    @PostMapping ("/getStudentTrialExamsByTeacher")
+    @PostMapping (path = "/getStudentTrialExamsByTeacher", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getStudentTrialExamsByTeacher(@RequestBody GetStudentTrialExamsByTeacherDTO request){
         try {
             List<GetStudentTrialExamsDTO> studentTrialExams = trialExamService.getAllTrialExamsByStudentId(request.getStudent_id());
