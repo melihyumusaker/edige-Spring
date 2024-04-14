@@ -65,7 +65,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/students-courses/get-all-students-courses").permitAll()
                         .requestMatchers("/students-courses/get-students-done-courses").permitAll()
                         .requestMatchers("/students-courses/get-students-not-done-courses").permitAll()
-                        .requestMatchers("/students-courses/addNewStudentCourseAndCourse").hasAnyAuthority(Role.STUDENT.name())
+                        .requestMatchers("/students-courses/addNewStudentCourseAndCourse").hasAnyAuthority(Role.TEACHER.name())
                         .requestMatchers("/trial-exams/setStudentTrialExamResult").permitAll()
                         .requestMatchers("/trial-exams/getStudentTrialExams").permitAll()
                         .requestMatchers("/trial-exams/getStudentTrialExamsByTeacher").permitAll()
