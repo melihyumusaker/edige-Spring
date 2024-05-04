@@ -21,4 +21,5 @@ public interface IStudentCourseService {
     void addNewStudentCourse(AddNewStudentCourseDTO request);
 
     void addNewStudentCourseAndCourse(AddNewStudentCourseAndCourseDTO request);
+    int countUnshownCoursesByStudentId(int studentId);
 }

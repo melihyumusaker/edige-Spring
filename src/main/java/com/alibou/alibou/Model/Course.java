@@ -37,4 +37,7 @@ public class Course {
 
     @Column(name = "homework_deadline")
     private LocalDateTime homework_deadline;
+
+    @Column(name = "is_shown")
+    private Integer is_shown;
 }

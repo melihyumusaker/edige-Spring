@@ -12,4 +12,5 @@ public class UpdateCourseDTO {
     private String homework_description;
     private Integer is_homework_done;
     private LocalDateTime homework_deadline;
+    private Integer is_shown;
 }

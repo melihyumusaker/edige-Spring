@@ -27,4 +27,7 @@ public interface StudentCourseRepository extends JpaRepository<StudentCourse,Int
     @Query("DELETE FROM StudentCourse sc WHERE sc.course_id.course_id = :courseId AND sc.student_id.student_id = :studentId")
     void deleteByCourseIdAndStudentId(@Param("courseId") int courseId, @Param("studentId") int studentId);
 
+    @Query("SELECT COUNT(sc) FROM StudentCourse sc JOIN sc.course_id c WHERE sc.student_id.student_id = :studentId AND c.is_shown = 0")
+    int countUnshownCoursesByStudentId(int studentId);
+
 }

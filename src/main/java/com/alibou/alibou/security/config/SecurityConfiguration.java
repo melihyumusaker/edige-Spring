@@ -54,13 +54,13 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**")
                         .permitAll()
                         .requestMatchers(
-                                "/students/**" , "/parents/**","/api/v1/auth/signup-student" , "/lessons/**"
+                                "/students/**" , "/parents/**","/api/v1/auth/signup-student"
                                 ,"/meetings/**" ,  "/relations/**" ,  "/teachers/**" , "/users/**" , "/gpt/**"
                                 ).permitAll()
                         .requestMatchers("/courses/studentFinishHomework").permitAll()
                         .requestMatchers("/courses/addNewCourse").hasAnyAuthority(Role.TEACHER.name())
                         .requestMatchers("/courses/deleteCourse").hasAnyAuthority(Role.TEACHER.name())
-                        .requestMatchers("/courses/updateCourse").hasAnyAuthority(Role.TEACHER.name())
+                        .requestMatchers("/courses/updateCourse").hasAnyAuthority(Role.TEACHER.name() , Role.STUDENT.name())
                         .requestMatchers("/students-courses/addNewStudentCourse").hasAnyAuthority(Role.TEACHER.name())
                         .requestMatchers("/weekly-programs/deleteWeeklyProgram").hasAnyAuthority(Role.TEACHER.name())
                         .requestMatchers("/weekly-programs/all").permitAll()
@@ -83,6 +83,12 @@ public class SecurityConfiguration {
                         .requestMatchers("/message/messageList").hasAnyAuthority(Role.TEACHER.name() , Role.ADMIN.name() , Role.STUDENT.name() , Role.PARENT.name())
                         .requestMatchers("/qrSettings/generateQRCode").hasAnyAuthority(Role.STUDENT.name())
                         .requestMatchers("/qrSettings/saveStudentRecords").permitAll()
+                        .requestMatchers("/lessons/grades").hasAnyAuthority(Role.TEACHER.name())
+                        .requestMatchers("/lessons/lessonNames").hasAnyAuthority(Role.TEACHER.name())
+                        .requestMatchers("/lessons/sublessonNames").hasAnyAuthority(Role.TEACHER.name())
+                        .requestMatchers("/lessons/sublessonNameDetails").hasAnyAuthority(Role.TEACHER.name())
+                        .requestMatchers("/lessons/getAllLessons").hasAnyAuthority(Role.TEACHER.name())
+                        .requestMatchers("/students-courses/unshownCourseNumber").hasAnyAuthority(Role.STUDENT.name())
                         .anyRequest().authenticated())
                 .cors(Customizer.withDefaults())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
