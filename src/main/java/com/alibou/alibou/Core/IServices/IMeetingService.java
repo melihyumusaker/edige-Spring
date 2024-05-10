@@ -6,7 +6,6 @@ import com.alibou.alibou.Model.Meeting;
 import java.util.List;
 
 public interface IMeetingService {
-    List<Meeting> getAllMeetings();
     boolean createMeeting(CreateMeetingDTO request);
     boolean updateMeeting(UpdateMeetingDTO request);
     void deleteMeeting(DeleteMeetingDTO request);

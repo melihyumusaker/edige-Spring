@@ -224,4 +224,30 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         else return null;
     }
+    @Override
+    public void forgetMyPassword(ForgetMyPasswordDTO forgetMyPasswordDTO) {
+
+        User user = userRepository.findByEmail(forgetMyPasswordDTO.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("Kullanıcı bulunamadı!"));
+
+        if (!passwordEncoder.matches(forgetMyPasswordDTO.getOldPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("Eski şifre yanlış!");
+        }
+
+        user.setPassword(passwordEncoder.encode(forgetMyPasswordDTO.getNewPassword()));
+
+        userRepository.save(user);
+    }
+    @Override
+    public void changePassword(ChangePasswordDTO changePasswordDTO) {
+        User user = userRepository.findById(changePasswordDTO.getUser_id())
+                .orElseThrow(() -> new IllegalArgumentException("Kullanıcı bulunamadı!"));
+
+        // Yeni şifreyi şifrele ve kullanıcıya ata
+        user.setPassword(passwordEncoder.encode(changePasswordDTO.getNewPassword()));
+
+        // Kullanıcıyı güncelle
+        userRepository.save(user);
+    }
+
 }

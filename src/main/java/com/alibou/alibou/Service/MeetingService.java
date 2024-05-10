@@ -29,9 +29,6 @@ public class MeetingService implements IMeetingService {
         this.relationRepository = relationRepository;
     }
 
-    public List<Meeting> getAllMeetings(){
-        return meetingRepository.findAll();
-    }
 
     public boolean createMeeting(CreateMeetingDTO request) {
         // Önce ilişki var mı kontrol edelim

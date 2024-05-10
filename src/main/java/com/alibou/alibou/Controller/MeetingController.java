@@ -18,12 +18,6 @@ public class MeetingController {
         this.meetingService = meetingService;
     }
 
-    @GetMapping("/all")
-    public List<Meeting> getAllStudents() {
-        return meetingService.getAllMeetings();
-    }
-
-
     @PostMapping(path = "/getStudentAndTeacherSpecialMeetings" ,  produces = "application/json;charset=UTF-8")
     public  ResponseEntity<?> getStudentAndTeacherSpecialMeetings(@RequestBody GetStudentMeetingsDTO request){
         try{
@@ -82,7 +76,6 @@ public class MeetingController {
         }catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
-
     }
 
 }

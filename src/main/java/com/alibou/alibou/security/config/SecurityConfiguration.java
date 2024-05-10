@@ -51,12 +51,20 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http.addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**")
-                        .permitAll()
-                        .requestMatchers(
-                                "/students/**" , "/parents/**","/api/v1/auth/signup-student"
-                                ,"/meetings/**" ,  "/relations/**" ,  "/teachers/**" , "/users/**" , "/gpt/**"
+                .authorizeHttpRequests(request ->
+                        request.requestMatchers(
+                                "/students/**" , "/parents/**"
+                                 ,  "/relations/**" ,  "/teachers/**" , "/users/**" , "/gpt/**"
                                 ).permitAll()
+                        .requestMatchers("/api/v1/auth/signup-student").permitAll()
+                        .requestMatchers("/api/v1/auth/signup-teacher").permitAll()
+                        .requestMatchers("/api/v1/auth/signup-parent").permitAll()
+                        .requestMatchers("/api/v1/auth/signup-admin").permitAll()
+                        .requestMatchers("/api/v1/auth/signin").permitAll()
+                        .requestMatchers("/api/v1/auth/webSignin").permitAll()
+                        .requestMatchers("/api/v1/auth/refresh").permitAll()
+                        .requestMatchers("/api/v1/auth/forget-password").hasAnyAuthority(Role.TEACHER.name() , Role.ADMIN.name() , Role.STUDENT.name() , Role.PARENT.name())
+                        .requestMatchers("/api/v1/auth/change-password").hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers("/courses/studentFinishHomework").permitAll()
                         .requestMatchers("/courses/addNewCourse").hasAnyAuthority(Role.TEACHER.name())
                         .requestMatchers("/courses/deleteCourse").hasAnyAuthority(Role.TEACHER.name())
@@ -89,6 +97,11 @@ public class SecurityConfiguration {
                         .requestMatchers("/lessons/sublessonNameDetails").hasAnyAuthority(Role.TEACHER.name())
                         .requestMatchers("/lessons/getAllLessons").hasAnyAuthority(Role.TEACHER.name())
                         .requestMatchers("/students-courses/unshownCourseNumber").hasAnyAuthority(Role.STUDENT.name())
+                        .requestMatchers("/meetings/updateMeeting").hasAnyAuthority(Role.TEACHER.name())
+                        .requestMatchers("/meetings/deleteMeeting").hasAnyAuthority(Role.TEACHER.name())
+                        .requestMatchers("/meetings/createMeeting").hasAnyAuthority(Role.TEACHER.name())
+                        .requestMatchers("/meetings/getTeacherAllMeetings").hasAnyAuthority(Role.TEACHER.name())
+                        .requestMatchers("/meetings/getStudentAndTeacherSpecialMeetings").hasAnyAuthority(Role.STUDENT.name() , Role.TEACHER.name())
                         .anyRequest().authenticated())
                 .cors(Customizer.withDefaults())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
