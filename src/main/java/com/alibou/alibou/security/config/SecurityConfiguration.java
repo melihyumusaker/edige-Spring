@@ -84,6 +84,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/trial-exams/getStudentTrialExams").permitAll()
                         .requestMatchers("/trial-exams/getStudentTrialExamsByTeacher").permitAll()
                         .requestMatchers("/trial-exams/updateTrialExam").hasAnyAuthority(Role.TEACHER.name())
+                                .requestMatchers("/trial-exams/updateTrialExamIsShownValue").hasAnyAuthority(Role.STUDENT.name())
+                                .requestMatchers("/trial-exams/countUnshown").hasAnyAuthority(Role.STUDENT.name())
                         .requestMatchers("/trial-exams/deleteTrialExam").hasAnyAuthority(Role.TEACHER.name())
                         .requestMatchers("/message/createMessage").hasAnyAuthority(Role.TEACHER.name() , Role.ADMIN.name() , Role.STUDENT.name() , Role.PARENT.name())
                         .requestMatchers("/message/messageHistory").hasAnyAuthority(Role.TEACHER.name() , Role.ADMIN.name() , Role.STUDENT.name() , Role.PARENT.name())

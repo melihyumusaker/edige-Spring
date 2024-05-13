@@ -1,9 +1,6 @@
 package com.alibou.alibou.Service;
 import com.alibou.alibou.Core.IServices.ITrialExamService;
-import com.alibou.alibou.DTO.TrialExam.DeleteTrialExamDTO;
-import com.alibou.alibou.DTO.TrialExam.GetStudentTrialExamsDTO;
-import com.alibou.alibou.DTO.TrialExam.SetTrialExamDTO;
-import com.alibou.alibou.DTO.TrialExam.TrialExamUpdateDTO;
+import com.alibou.alibou.DTO.TrialExam.*;
 import com.alibou.alibou.Model.Student;
 import com.alibou.alibou.Model.TrialExam;
 import com.alibou.alibou.Repository.StudentRepository;
@@ -72,6 +69,7 @@ public class TrialExamService implements ITrialExamService {
             trialExam.setFen_net(fenNet);
             trialExam.setSosyal_net(sosyalNet);
             trialExam.setNet(net);
+            trialExam.setIs_shown(0);
 
             trialExamRepository.save(trialExam);
             return true;
@@ -136,8 +134,30 @@ public class TrialExamService implements ITrialExamService {
         }
     }
 
-    public List<GetStudentTrialExamsDTO> getAllTrialExamsByStudentId(int studentId) {
+    @Override
+    public boolean updateTrialExamIsShownValue(UpdateTrialExamIsShownValueDTO request) {
+        Optional<TrialExam> optionalTrialExam = trialExamRepository.findById(request.getTrial_exam_id());
 
+        if (optionalTrialExam.isPresent()) {
+            TrialExam trialExam = optionalTrialExam.get();
+            trialExam.setIs_shown(1);
+            trialExamRepository.save(trialExam);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int countUnshownExamsByStudentId(GetIsShownNumberDTO request) {
+        try {
+            return trialExamRepository.countByStudentIdAndIsShownFalse(request.getStudent_id());
+        } catch (Exception ex) {
+            throw new RuntimeException("An error occurred while counting unshown exams: " + ex.getMessage());
+        }
+    }
+
+    public List<GetStudentTrialExamsDTO> getAllTrialExamsByStudentId(int studentId) {
         List<TrialExam> studentTrialExams = trialExamRepository.findAllByStudentIdOrderByDateAsc(studentId);
         return studentTrialExams.stream()
                 .map(this::mapTrialExamToDTO)
@@ -162,6 +182,7 @@ public class TrialExamService implements ITrialExamService {
         dto.setMat_net(trialExam.getMat_net());
         dto.setSosyal_net(trialExam.getSosyal_net());
         dto.setNet(trialExam.getNet());
+        dto.setIs_shown(trialExam.getIs_shown());
 
         return dto;
     }

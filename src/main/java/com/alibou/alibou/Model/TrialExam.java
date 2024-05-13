@@ -70,4 +70,7 @@ public class TrialExam {
 
     @Column(name = "exam_name")
     private String exam_name;
+
+    @Column(name = "is_shown")
+    private int is_shown;
 }

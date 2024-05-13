@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -226,28 +227,30 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
     @Override
     public void forgetMyPassword(ForgetMyPasswordDTO forgetMyPasswordDTO) {
+        String newPassword = forgetMyPasswordDTO.getNewPassword();
+        String oldPassword = forgetMyPasswordDTO.getOldPassword();
 
         User user = userRepository.findByEmail(forgetMyPasswordDTO.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("Kullanıcı bulunamadı!"));
 
-        if (!passwordEncoder.matches(forgetMyPasswordDTO.getOldPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("Eski şifre yanlış!");
-        }
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) throw new IllegalArgumentException("Eski şifre yanlış!");
+        if(Objects.equals(oldPassword, newPassword)) throw new IllegalArgumentException("Eski ve Yeni Şifre Aynı Olamaz!");
+        if (newPassword.length() < 8) throw new IllegalArgumentException("Yeni şifre en az 8 karakter olmalıdır!");
 
-        user.setPassword(passwordEncoder.encode(forgetMyPasswordDTO.getNewPassword()));
-
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }
+
     @Override
     public void changePassword(ChangePasswordDTO changePasswordDTO) {
         User user = userRepository.findById(changePasswordDTO.getUser_id())
                 .orElseThrow(() -> new IllegalArgumentException("Kullanıcı bulunamadı!"));
 
-        // Yeni şifreyi şifrele ve kullanıcıya ata
-        user.setPassword(passwordEncoder.encode(changePasswordDTO.getNewPassword()));
+        String newPassword = changePasswordDTO.getNewPassword();
 
-        // Kullanıcıyı güncelle
+        if (newPassword.length() < 8) throw new IllegalArgumentException("Yeni şifre en az 8 karakter olmalıdır!");
+
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }
-
 }
