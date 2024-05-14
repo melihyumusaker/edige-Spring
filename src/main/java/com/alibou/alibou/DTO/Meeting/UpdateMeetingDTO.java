@@ -15,4 +15,5 @@ public class UpdateMeetingDTO {
     private LocalTime start_hour;
     private String title;
     private String location;
+    private String teacher_comment;
 }

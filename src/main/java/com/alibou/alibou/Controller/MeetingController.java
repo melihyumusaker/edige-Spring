@@ -1,9 +1,12 @@
 package com.alibou.alibou.Controller;
 import com.alibou.alibou.Core.IServices.IMeetingService;
 import com.alibou.alibou.DTO.Meeting.*;
+import com.alibou.alibou.DTO.TrialExam.GetIsShownNumberDTO;
 import com.alibou.alibou.Model.Meeting;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -77,5 +80,18 @@ public class MeetingController {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
+    @PostMapping("/countUnshown")
+    public ResponseEntity<?> countUnshownExams(@RequestBody GetIsShownNumberDTO request) {
+        try {
+            int count = meetingService.countUnshownMeetingByStudentId(request);
+            return ResponseEntity.ok(count);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + ex.getMessage());
+        }
+    }
 
+    @Scheduled(fixedRate = 3600000)
+    public void scheduledUpdateIsShown() {
+        meetingService.updateIsShown();
+    }
 }

@@ -2,6 +2,7 @@ package com.alibou.alibou.Service;
 
 import com.alibou.alibou.Core.IServices.IMeetingService;
 import com.alibou.alibou.DTO.Meeting.*;
+import com.alibou.alibou.DTO.TrialExam.GetIsShownNumberDTO;
 import com.alibou.alibou.Model.Meeting;
 import com.alibou.alibou.Model.Relation;
 import com.alibou.alibou.Model.Student;
@@ -10,7 +11,9 @@ import com.alibou.alibou.Repository.MeetingRepository;
 import com.alibou.alibou.Repository.RelationRepository;
 import com.alibou.alibou.Repository.StudentRepository;
 import com.alibou.alibou.Repository.TeacherRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -36,22 +39,22 @@ public class MeetingService implements IMeetingService {
 
         if (relationOptional.isPresent()) {
             Relation relation = relationOptional.get();
-            // Relation bulundu, Meeting oluşturalım
+
             Meeting newMeeting = Meeting.builder()
-                    .relation_id(relationOptional.get()) // Relation nesnesinden gelen ID
-                    .description(request.getDescription()) // DTO'dan gelen description
-                    .start_day(request.getStart_day()) // DTO'dan gelen startDay
-                    .start_hour(request.getStart_hour()) // DTO'dan gelen startHour
-                    .location(request.getLocation()) // DTO'dan gelen location
+                    .relation_id(relationOptional.get())
+                    .description(request.getDescription())
+                    .start_day(request.getStart_day())
+                    .start_hour(request.getStart_hour())
+                    .location(request.getLocation())
                     .title(request.getTitle())
                     .createdAt(LocalDateTime.now())
+                    .is_shown(0)
                     .build();
 
-            // Meeting'i kaydedelim
             meetingRepository.save(newMeeting);
-            return true; // Başarılı bir şekilde oluşturuldu ve kaydedildi
+            return true;
         }
-        return false; // Relation bulunamadıysa false dön
+        return false;
     }
 
 
@@ -69,8 +72,8 @@ public class MeetingService implements IMeetingService {
             updates.put("startHour", request.getStart_hour());
             updates.put("title", request.getTitle());
             updates.put("location", request.getLocation());
+            updates.put("teacherComment" , request.getTeacher_comment());
 
-            // Apply updates only if the value is not null
             updates.forEach((field, value) -> {
                 if (value != null) {
                     switch (field) {
@@ -95,10 +98,11 @@ public class MeetingService implements IMeetingService {
                         case "location":
                             meeting.setLocation((String) value);
                             break;
+                        case "teacherComment":
+                            meeting.setTeacher_comment((String) value);
                     }
                 }
             });
-
             meetingRepository.save(meeting);
             return true;
         }
@@ -127,10 +131,8 @@ public class MeetingService implements IMeetingService {
         Optional<Relation> optionalRelation = relationRepository.findRelationByStudentIdAndTeacherId(studentId , teacherId);
 
         if (optionalRelation.isPresent()) {
-            // Relation bulunduğunda, bu relation'a ait meeting'leri döndür
             return meetingRepository.findByRelationId(optionalRelation.get().getRelation_id());
         } else {
-            // Eğer relation bulunamazsa boş bir liste döndür
             return Collections.emptyList();
         }
     }
@@ -140,14 +142,29 @@ public class MeetingService implements IMeetingService {
         int teacherId = request.getTeacher_id();
 
         List<Integer> relationIds  = relationRepository.findRelationIdsByTeacherId(teacherId);
-
         if (!relationIds.isEmpty()) {
             return meetingRepository.findByRelationIds(relationIds);
         } else {
-            // Eğer hiç relation_id yoksa, boş bir liste döndürüyoruz.
             return Collections.emptyList();
         }
+    }
+    @Override
+    public int countUnshownMeetingByStudentId(GetIsShownNumberDTO request) {
+        try {
+            return meetingRepository.countByStudentIdAndIsShownFalse(request.getStudent_id());
+        } catch (Exception ex) {
+            throw new RuntimeException("An error occurred while counting unshown meetings: " + ex.getMessage());
+        }
+    }
 
+    @Transactional
+    public void updateIsShown() {
+        LocalDateTime twoDaysAgo = LocalDateTime.now().minusDays(2);
+        List<Meeting> meetings = meetingRepository.findMeetingsToBeShown(twoDaysAgo);
+        for (Meeting meeting : meetings) {
+            meeting.setIs_shown(1);
+        }
+        meetingRepository.saveAll(meetings);
     }
 
 

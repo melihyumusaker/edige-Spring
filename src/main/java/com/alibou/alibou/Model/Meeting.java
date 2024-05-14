@@ -47,6 +47,12 @@ public class Meeting {
     @Column(name = "location")
     private String location;
 
+    @Column(name = "teacher_comment")
+    private String teacher_comment;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    @Column(name = "is_shown")
+    private int is_shown;
 }
