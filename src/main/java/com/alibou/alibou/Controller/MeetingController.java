@@ -89,9 +89,12 @@ public class MeetingController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + ex.getMessage());
         }
     }
-
     @Scheduled(fixedRate = 3600000)
     public void scheduledUpdateIsShown() {
         meetingService.updateIsShown();
+    }
+    @Scheduled(fixedRate = 3600000 * 24)
+    public void deletePastMeetings() {
+        meetingService.deletePastMeetings();
     }
 }

@@ -223,6 +223,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             return webStudentResponse;
         }
+        else if(user.getRole() == Role.ADMIN){
+            WebAdminResponse webAdminResponse = new WebAdminResponse();
+            webAdminResponse.setUser(user);
+            webAdminResponse.setToken(jwt);
+            webAdminResponse.setRefreshToken(refreshToken);
+
+            return webAdminResponse;
+        }
         else return null;
     }
     @Override

@@ -16,4 +16,6 @@ public interface IMeetingService {
     List<Meeting> getTeacherAllMeetings(GetTeacherMeetingsDTO request);
     int countUnshownMeetingByStudentId(GetIsShownNumberDTO request);
     void updateIsShown();
+
+    void deletePastMeetings();
 }

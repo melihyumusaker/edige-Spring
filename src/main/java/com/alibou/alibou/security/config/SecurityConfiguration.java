@@ -56,10 +56,10 @@ public class SecurityConfiguration {
                                 "/students/**" , "/parents/**"
                                  ,  "/relations/**" ,  "/teachers/**" , "/users/**" , "/gpt/**"
                                 ).permitAll()
-                        .requestMatchers("/api/v1/auth/signup-student").permitAll()
-                        .requestMatchers("/api/v1/auth/signup-teacher").permitAll()
-                        .requestMatchers("/api/v1/auth/signup-parent").permitAll()
-                        .requestMatchers("/api/v1/auth/signup-admin").permitAll()
+                        .requestMatchers("/api/v1/auth/signup-student").hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers("/api/v1/auth/signup-teacher").hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers("/api/v1/auth/signup-parent").hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers("/api/v1/auth/signup-admin").hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers("/api/v1/auth/signin").permitAll()
                         .requestMatchers("/api/v1/auth/webSignin").permitAll()
                         .requestMatchers("/api/v1/auth/refresh").permitAll()

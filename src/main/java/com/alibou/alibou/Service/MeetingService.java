@@ -167,5 +167,11 @@ public class MeetingService implements IMeetingService {
         meetingRepository.saveAll(meetings);
     }
 
+    @Override
+    @Transactional
+    public void deletePastMeetings() {
+        meetingRepository.deleteMeetingsOlderThan30Days();
+    }
+
 
 }
