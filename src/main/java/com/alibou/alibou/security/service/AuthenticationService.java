@@ -11,8 +11,8 @@ public interface AuthenticationService  {
     User signupParent(SignUpParentRequest signUpParentRequest);
     JwtAuthResponse signin(SigninRequest signinRequest);
     JwtAuthResponse refreshToken(RefreshTokenRequest refreshTokenRequest);
-
     void signupAdmin(SignUpAdminRequest request);
-
     Object webSignin(SigninRequest signinRequest);
+    void forgetMyPassword(ForgetMyPasswordDTO forgetMyPasswordDTO);
+    void changePassword(ChangePasswordDTO changePasswordDTO);
 }

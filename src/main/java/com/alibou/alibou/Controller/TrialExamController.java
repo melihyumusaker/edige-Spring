@@ -86,4 +86,25 @@ public class TrialExamController {
         }
     }
 
+    @PutMapping("/updateTrialExamIsShownValue")
+    public ResponseEntity<?> updateTrialExamIsShownValue(@RequestBody UpdateTrialExamIsShownValueDTO request){
+        boolean isUpdated = trialExamService.updateTrialExamIsShownValue(request);
+
+        if (isUpdated) {
+            return ResponseEntity.ok("Trial Exam updated successfully");
+        } else {
+            return ResponseEntity.badRequest().body("Trial Exam not found or invalid data");
+        }
+    }
+
+    @PostMapping("/countUnshown")
+    public ResponseEntity<?> countUnshownExams(@RequestBody GetIsShownNumberDTO request) {
+        try {
+            int count = trialExamService.countUnshownExamsByStudentId(request);
+            return ResponseEntity.ok(count);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + ex.getMessage());
+        }
+    }
+
 }

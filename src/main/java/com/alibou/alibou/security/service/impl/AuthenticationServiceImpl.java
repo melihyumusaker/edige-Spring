@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -222,6 +223,42 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             return webStudentResponse;
         }
+        else if(user.getRole() == Role.ADMIN){
+            WebAdminResponse webAdminResponse = new WebAdminResponse();
+            webAdminResponse.setUser(user);
+            webAdminResponse.setToken(jwt);
+            webAdminResponse.setRefreshToken(refreshToken);
+
+            return webAdminResponse;
+        }
         else return null;
+    }
+    @Override
+    public void forgetMyPassword(ForgetMyPasswordDTO forgetMyPasswordDTO) {
+        String newPassword = forgetMyPasswordDTO.getNewPassword();
+        String oldPassword = forgetMyPasswordDTO.getOldPassword();
+
+        User user = userRepository.findByEmail(forgetMyPasswordDTO.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("Kullanıcı bulunamadı!"));
+
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) throw new IllegalArgumentException("Eski şifre yanlış!");
+        if(Objects.equals(oldPassword, newPassword)) throw new IllegalArgumentException("Eski ve Yeni Şifre Aynı Olamaz!");
+        if (newPassword.length() < 8) throw new IllegalArgumentException("Yeni şifre en az 8 karakter olmalıdır!");
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
+    @Override
+    public void changePassword(ChangePasswordDTO changePasswordDTO) {
+        User user = userRepository.findById(changePasswordDTO.getUser_id())
+                .orElseThrow(() -> new IllegalArgumentException("Kullanıcı bulunamadı!"));
+
+        String newPassword = changePasswordDTO.getNewPassword();
+
+        if (newPassword.length() < 8) throw new IllegalArgumentException("Yeni şifre en az 8 karakter olmalıdır!");
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
     }
 }

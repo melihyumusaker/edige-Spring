@@ -51,10 +51,10 @@ public class CourseService implements ICourseService {
                     .homework_description(request.getHomework_description())
                     .is_homework_done(0)
                     .homework_deadline(request.getHomework_deadline())
+                    .is_shown(0)
                     .build();
 
             courseRepository.save(course);
-
             return course.getCourse_id();
         } catch (Exception e) {
             throw new RuntimeException("Course could not be added. Reason: " + e.getMessage());
@@ -69,7 +69,7 @@ public class CourseService implements ICourseService {
             updateIfNotNull(request.getHomework_description(), existingCourse::setHomework_description);
             updateIfNotNull(request.getHomework_deadline(), existingCourse::setHomework_deadline);
             updateIfNotNull(request.getIs_homework_done(), existingCourse::setIs_homework_done);
-
+            updateIfNotNull(request.getIs_shown() , existingCourse::setIs_shown);
             courseRepository.save(existingCourse);
         });
 

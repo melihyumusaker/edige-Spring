@@ -46,13 +46,12 @@ public class StudentCourseService implements IStudentCourseService {
                     .student_id(student.get())
                     .course_id(course.get())
                     .build();
-
             studentCourseRepository.save(studentCourse);
-
         }
-
     }
-
+    public int countUnshownCoursesByStudentId(int studentId) {
+        return studentCourseRepository.countUnshownCoursesByStudentId(studentId);
+    }
     @Override
     public void addNewStudentCourseAndCourse(AddNewStudentCourseAndCourseDTO request) {
             Course course = Course.builder()
@@ -62,6 +61,7 @@ public class StudentCourseService implements IStudentCourseService {
                     .homework_description(request.getHomework_description())
                     .is_homework_done(0)
                     .homework_deadline(request.getHomework_deadline())
+                    .is_shown(0)
                     .build();
 
             courseRepository.save(course);

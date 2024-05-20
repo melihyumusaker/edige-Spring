@@ -49,7 +49,16 @@ public class StudentCourseController {
             studentCourseService.addNewStudentCourseAndCourse(request);
             return  ResponseEntity.ok("");
         } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
+    @PostMapping("/unshownCourseNumber")
+    public ResponseEntity<?> countUnshownCoursesByStudentId(@RequestBody GetStudentsCoursesDTO request) {
+        try {
+            int unshownCourseNumber=  studentCourseService.countUnshownCoursesByStudentId(request.getStudent_id());
+            return ResponseEntity.ok(unshownCourseNumber);
+        }catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }

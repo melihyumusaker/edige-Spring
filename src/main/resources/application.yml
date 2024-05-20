@@ -20,4 +20,8 @@ server:
   cache:
     cache-names: lessons
     caffeine:
-      spec: maximumSize=500, expireAfterAccess = 60m
+      spec: maximumSize=1000, expireAfterAccess = 60m
+
+openai:
+  key: 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
+
