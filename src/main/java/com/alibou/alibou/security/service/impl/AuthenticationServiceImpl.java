@@ -211,6 +211,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             webTeacherResponse.setTeacher(teacher);
             webTeacherResponse.setToken(jwt);
             webTeacherResponse.setRefreshToken(refreshToken);
+            webTeacherResponse.setRole(user.getRole());
 
             return webTeacherResponse;
         }
@@ -220,6 +221,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             webStudentResponse.setStudent(student);
             webStudentResponse.setToken(jwt);
             webStudentResponse.setRefreshToken(refreshToken);
+            webStudentResponse.setRole(user.getRole());
 
             return webStudentResponse;
         }
@@ -228,6 +230,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             webAdminResponse.setUser(user);
             webAdminResponse.setToken(jwt);
             webAdminResponse.setRefreshToken(refreshToken);
+            webAdminResponse.setRole(user.getRole());
 
             return webAdminResponse;
         }
