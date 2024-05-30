@@ -30,9 +30,13 @@ public class StudentController {
         this.userService = userService;
     }
 
-    @GetMapping("/all")
-    public List<Student> getAllStudents() {
-        return studentService.getAllStudents();
+    @GetMapping(path = "/getAllStudents", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getAllStudents() {
+        try{
+            return ResponseEntity.ok(studentService.getAllStudents());
+        }catch (Exception ex){
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     @PostMapping(path = "/getStudentById", produces = "application/json;charset=UTF-8")

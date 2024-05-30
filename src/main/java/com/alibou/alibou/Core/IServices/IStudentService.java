@@ -1,13 +1,14 @@
 package com.alibou.alibou.Core.IServices;
 
 import com.alibou.alibou.DTO.Relation.SetRelationDTO;
+import com.alibou.alibou.DTO.Student.GetAllStudentResponseDTO;
 import com.alibou.alibou.Model.Relation;
 import com.alibou.alibou.Model.Student;
 
 import java.util.List;
 
 public interface IStudentService {
-    List<Student> getAllStudents();
+    List<GetAllStudentResponseDTO> getAllStudents();
 
     Student getStudentDetailsById(int studentId);
 

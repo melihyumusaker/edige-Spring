@@ -2,6 +2,8 @@ package com.alibou.alibou.Service;
 
 import com.alibou.alibou.Core.IServices.IStudentService;
 import com.alibou.alibou.DTO.Relation.SetRelationDTO;
+import com.alibou.alibou.DTO.Student.GetAllStudentResponseDTO;
+import com.alibou.alibou.DTO.Teacher.GetAllTeacherDTO;
 import com.alibou.alibou.Model.Relation;
 import com.alibou.alibou.Model.Student;
 import com.alibou.alibou.Model.Teacher;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService implements IStudentService {
@@ -28,8 +31,21 @@ public class StudentService implements IStudentService {
         this.teacherRepository = teacherRepository;
     }
 
-    public List<Student> getAllStudents(){
-        return studentRepository.findAll();
+    public List<GetAllStudentResponseDTO> getAllStudents(){
+        List<Student> students = studentRepository.findAll();
+        List<GetAllStudentResponseDTO> response = students.stream().map(student -> GetAllStudentResponseDTO.builder()
+                .name(student.getUser().getName())
+                .surname(student.getUser().getSurname())
+                .birth_date(student.getUser().getBirth_date())
+                .email(student.getUser().getEmail())
+                .phone(student.getUser().getPhone())
+                .city(student.getUser().getCity())
+                .enneagram_result(student.getEnneagram_result())
+                .section(student.getSection())
+                .school(student.getSchool())
+                .coachName(student.getTeacher().getUser().getName() + " " + student.getTeacher().getUser().getSurname()).build())
+                .collect(Collectors.toList());
+        return response;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.alibou.alibou.Service;
 
 import com.alibou.alibou.Core.IServices.IStudentRecordService;
+import com.alibou.alibou.DTO.QR.GetStudentRecordsDTO;
+import com.alibou.alibou.DTO.QR.GetStudentRecordsResponseDTO;
 import com.alibou.alibou.DTO.QR.SaveStudentRecordsDTO;
 import com.alibou.alibou.Model.Student;
 import com.alibou.alibou.Model.StudentRecord;
@@ -8,6 +10,7 @@ import com.alibou.alibou.Repository.RelationRepository;
 import com.alibou.alibou.Repository.StudentRecordRepository;
 import com.alibou.alibou.Repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -15,7 +18,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentRecordService implements IStudentRecordService {
@@ -70,4 +75,30 @@ public class StudentRecordService implements IStudentRecordService {
                 .status(status)
                 .build();
     }
+
+    @Override
+    public GetStudentRecordsResponseDTO getStudentRecords(GetStudentRecordsDTO request) {
+
+        List<StudentRecord> records = studentRecordRepository.findAllRecordsByStudentId(request.getStudent_id());
+        int countRecordsWithNullExitTime = studentRecordRepository.countRecordsWithNullExitTime(request.getStudent_id());
+
+        List<GetStudentRecordsResponseDTO.SpecialStudentRecordDTO> specialStudentRecordDTOList = records.stream()
+                .map(record -> GetStudentRecordsResponseDTO.SpecialStudentRecordDTO.builder()
+                        .date(record.getDate())
+                        .entry_time(record.getEntry_time())
+                        .exit_time(record.getExit_time())
+                        .status(record.getStatus())
+                        .build())
+                .collect(Collectors.toList());
+
+        return GetStudentRecordsResponseDTO.builder()
+                .toplamDevamsizlik(countRecordsWithNullExitTime)
+                .studentRecord(specialStudentRecordDTOList)
+                .build();
+    }
+
+
+
+
+
 }

@@ -94,6 +94,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/message/messageList").hasAnyAuthority(Role.TEACHER.name() , Role.ADMIN.name() , Role.STUDENT.name() , Role.PARENT.name())
                         .requestMatchers("/qrSettings/generateQRCode").hasAnyAuthority(Role.STUDENT.name(),Role.ADMIN.name())
                         .requestMatchers("/qrSettings/saveStudentRecords").permitAll()
+                                .requestMatchers("/qrSettings/getStudentRecords").hasAnyAuthority(Role.ADMIN.name() , Role.TEACHER.name())
                         .requestMatchers("/lessons/grades").hasAnyAuthority(Role.TEACHER.name(),Role.ADMIN.name())
                         .requestMatchers("/lessons/lessonNames").hasAnyAuthority(Role.TEACHER.name(),Role.ADMIN.name())
                         .requestMatchers("/lessons/sublessonNames").hasAnyAuthority(Role.TEACHER.name(),Role.ADMIN.name())
