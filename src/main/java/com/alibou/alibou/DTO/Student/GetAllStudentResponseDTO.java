@@ -7,6 +7,7 @@ import java.util.Date;
 @Data
 @Builder
 public class GetAllStudentResponseDTO {
+    private int student_id;
     private String name;
     private String surname;
     private Date birth_date;
@@ -17,5 +18,5 @@ public class GetAllStudentResponseDTO {
     private String section;
     private String school;
     private String coachName;
-
+    private String username;
 }

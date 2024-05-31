@@ -1,14 +1,11 @@
 package com.alibou.alibou.DTO.Teacher;
 
-import jakarta.persistence.Column;
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-@Builder
-public class GetAllTeacherDTO {
+public class UpdateTeacherDTO {
     private int teacher_id;
     private String name;
     private String surname;
@@ -19,4 +16,5 @@ public class GetAllTeacherDTO {
     private String enneagram_result;
     private String about;
     private String expertise;
+    private String username;
 }

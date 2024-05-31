@@ -16,4 +16,6 @@ public interface IStudentService {
     int getStudentIdByUserId(int userId);
 
     void setEnneagramTestSolved(int studentId);
+
+    boolean updateStudent(GetAllStudentResponseDTO request);
 }
