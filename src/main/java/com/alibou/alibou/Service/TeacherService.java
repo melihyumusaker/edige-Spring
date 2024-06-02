@@ -176,7 +176,7 @@ public class TeacherService implements ITeacherService {
         updateIfNotNull(request.getCity(), user::setCity);
         updateIfNotNull(request.getUsername(), user::setUsername);
     }
-
+ 
     private <T> void updateIfNotNull(T value, Consumer<T> setter) {
         if (value != null) {
             setter.accept(value);

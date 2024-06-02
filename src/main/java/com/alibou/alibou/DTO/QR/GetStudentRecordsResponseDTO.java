@@ -4,6 +4,7 @@ import com.alibou.alibou.Model.StudentRecord;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class GetStudentRecordsResponseDTO {
     @Builder
     public static class SpecialStudentRecordDTO {
         private Date date;
-        private Date entry_time;
+        private LocalTime entry_time;
         private Date exit_time;
         private String status;
     }

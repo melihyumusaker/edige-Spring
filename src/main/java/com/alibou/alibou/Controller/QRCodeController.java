@@ -36,7 +36,7 @@ public class QRCodeController {
     }
 
     @PostMapping(value = "/saveStudentRecords")
-    public ResponseEntity<?> saveStudentRecords(@RequestBody SaveStudentRecordsDTO request) {
+    public synchronized  ResponseEntity<?> saveStudentRecords(@RequestBody SaveStudentRecordsDTO request) {
         try {
             studentRecordService.saveStudentRecords(request);
             return ResponseEntity.status(HttpStatus.OK).body("");
