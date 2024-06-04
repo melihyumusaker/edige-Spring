@@ -4,9 +4,11 @@ import com.alibou.alibou.Core.IServices.IStudentService;
 import com.alibou.alibou.Core.IServices.IUserService;
 import com.alibou.alibou.DTO.Parent.GetParentIdByUserIdDTO;
 import com.alibou.alibou.DTO.Relation.SetRelationDTO;
+import com.alibou.alibou.DTO.Student.GetAllStudentResponseDTO;
 import com.alibou.alibou.DTO.Student.GetStudentByIdRequestDTO;
 import com.alibou.alibou.DTO.Student.GetStudentIdByUserIdDTO;
 import com.alibou.alibou.DTO.Student.SetStudentsEnneagramResultDTO;
+import com.alibou.alibou.DTO.Teacher.UpdateTeacherDTO;
 import com.alibou.alibou.Model.Relation;
 import com.alibou.alibou.Model.Student;
 import com.alibou.alibou.Service.StudentService;
@@ -30,9 +32,13 @@ public class StudentController {
         this.userService = userService;
     }
 
-    @GetMapping("/all")
-    public List<Student> getAllStudents() {
-        return studentService.getAllStudents();
+    @GetMapping(path = "/getAllStudents", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getAllStudents() {
+        try{
+            return ResponseEntity.ok(studentService.getAllStudents());
+        }catch (Exception ex){
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     @PostMapping(path = "/getStudentById", produces = "application/json;charset=UTF-8")
@@ -79,4 +85,19 @@ public class StudentController {
         }
     }
 
+    @PostMapping("/updateStudent")
+    public ResponseEntity<?> updateStudent(@RequestBody GetAllStudentResponseDTO request) {
+        try {
+
+            boolean isUpdated = studentService.updateStudent(request);
+
+            if (isUpdated) {
+                return ResponseEntity.ok("Student updated successfully");
+            } else {
+                return ResponseEntity.badRequest().body("Student not found or invalid data");
+            }
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
 }

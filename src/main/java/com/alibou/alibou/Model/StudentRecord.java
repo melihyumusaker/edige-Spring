@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
@@ -29,7 +30,7 @@ public class StudentRecord {
 
     @Column(name = "entry_time")
     @Temporal(TemporalType.TIME)
-    private Date entry_time;
+    private LocalTime entry_time;
 
     @Column(name = "exit_time")
     @Temporal(TemporalType.TIME)

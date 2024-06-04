@@ -20,11 +20,8 @@ import java.util.List;
 @RequestMapping("/lessons")
 @CacheConfig(cacheNames = "lessons")
 public class LessonController {
-
     private static final Logger logger = LoggerFactory.getLogger(LessonController.class);
-
     private final ILessonService lessonService;
-
     @Autowired
     public LessonController(ILessonService lessonService) {
         this.lessonService = lessonService;

@@ -2,9 +2,8 @@ package com.alibou.alibou.Controller;
 import com.alibou.alibou.Core.IServices.IMeetingService;
 import com.alibou.alibou.Core.IServices.IUserService;
 import com.alibou.alibou.DTO.Parent.GetParentIdByUserIdDTO;
-import com.alibou.alibou.DTO.Teacher.GetTeacherIdByUserIdDTO;
-import com.alibou.alibou.DTO.Teacher.GetTeachersByStudentTypeDTO;
-import com.alibou.alibou.DTO.Teacher.UpdateTeacherEnneagramTypeAndAboutDTO;
+import com.alibou.alibou.DTO.Student.GetAllStudentResponseDTO;
+import com.alibou.alibou.DTO.Teacher.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -31,9 +30,13 @@ public class TeacherController {
         this.userService = userService;
     }
 
-    @GetMapping("/all")
-    public List<Teacher> getAllTeachers() {
-        return teacherService.getAllTeachers();
+    @GetMapping(path = "/getAllTeachers", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getAllTeachers() {
+        try{
+            return ResponseEntity.ok(teacherService.getAllTeachers());
+        }catch (Exception ex){
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     @GetMapping(path = "/showStudents", produces = "application/json;charset=UTF-8")
@@ -51,6 +54,16 @@ public class TeacherController {
         }
 
         return ResponseEntity.ok(students);
+    }
+
+    @PostMapping(path = "/showStudents1", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> showStudents1(@RequestBody ShowStudents1DTO request) {
+        try{
+            List<GetAllStudentResponseDTO> students = teacherService.getStudentsByTeacherId1(request.getTeacher_id());
+            return ResponseEntity.ok(students);
+        }catch (Exception ex){
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     @PostMapping("/getTeacherIdByUserId")
@@ -105,6 +118,22 @@ public class TeacherController {
             int teacherId = teacherService.getTeacherIdByUserId(userId);
 
             boolean isUpdated = teacherService.updateTeacherAboutAndEnneagramTestSolved(request , teacherId);
+
+            if (isUpdated) {
+                return ResponseEntity.ok("Teacher updated successfully");
+            } else {
+                return ResponseEntity.badRequest().body("Teacher not found or invalid data");
+            }
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @PostMapping("/updateTeacher")
+    public ResponseEntity<?> updateTeacher(@RequestBody UpdateTeacherDTO request) {
+        try {
+
+            boolean isUpdated = teacherService.updateTeacher(request);
 
             if (isUpdated) {
                 return ResponseEntity.ok("Teacher updated successfully");
