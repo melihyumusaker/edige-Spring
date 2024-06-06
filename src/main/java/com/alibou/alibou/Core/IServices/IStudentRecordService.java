@@ -9,7 +9,7 @@ import com.alibou.alibou.Model.StudentRecord;
 import java.util.List;
 
 public interface IStudentRecordService {
-    void saveStudentRecords(SaveStudentRecordsDTO request);
+    String saveStudentRecords(SaveStudentRecordsDTO request);
     GetStudentRecordsResponseDTO getStudentRecords(GetStudentRecordsDTO request);
 
 }

@@ -9,6 +9,7 @@ import com.alibou.alibou.Model.StudentRecord;
 import com.alibou.alibou.Repository.RelationRepository;
 import com.alibou.alibou.Repository.StudentRecordRepository;
 import com.alibou.alibou.Repository.StudentRepository;
+import com.alibou.alibou.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,23 +25,21 @@ public class StudentRecordService implements IStudentRecordService {
 
     private final StudentRecordRepository studentRecordRepository;
     private final StudentRepository studentRepository;
+
     @Autowired
     public StudentRecordService(StudentRecordRepository studentRecordRepository,StudentRepository studentRepository){
         this.studentRecordRepository = studentRecordRepository;
         this.studentRepository  = studentRepository;
     }
-
     @Override
-    public synchronized  void saveStudentRecords(SaveStudentRecordsDTO request) {
+    public synchronized String saveStudentRecords(SaveStudentRecordsDTO request) {
         Optional<Student> optionalStudent = studentRepository.findByUserId(request.getUser_id());
 
         if (optionalStudent.isPresent()) {
             LocalDate today = LocalDate.now();
             LocalTime now = LocalTime.now();
-
+            String name = optionalStudent.get().getUser().getName();
             Optional<StudentRecord> todayRecordOptional = studentRecordRepository.findTodayRecordByStudentId(request.getUser_id(), today);
-            System.out.println("Fonksiyona girdi.");
-            System.out.println("Bugün tarih: " + today);
 
             if (!todayRecordOptional.isPresent()) {
                 // Bugün için kayıt yok, yeni "Entered" kaydı oluştur
@@ -49,6 +48,7 @@ public class StudentRecordService implements IStudentRecordService {
                 studentRecord.setEntry_time(now);
                 studentRecordRepository.save(studentRecord);
                 System.out.println("Entered kaydı alındı ve kaydedildi.");
+                return "Hoşgeldin " + name;
             } else {
                 System.out.println("Bugün için kayıt bulundu.");
                 StudentRecord todayRecord = todayRecordOptional.get();
@@ -71,18 +71,22 @@ public class StudentRecordService implements IStudentRecordService {
                         todayRecord.setExit_time(Date.from(now.atDate(today).atZone(ZoneId.systemDefault()).toInstant()));
                         studentRecordRepository.save(todayRecord);
                         System.out.println("Exited kaydı alındı ve güncellendi.");
+                        return "Görüşürüz " + name;
                     } else {
                         System.out.println("QR kodu son girişten 1 dakika içinde tarandı. Tekrar taramayı yok say.");
+                        return "QR kodunuz tarandı. " + name;
                     }
                 } else {
                     System.out.println("Giriş zamanı null. Bu, beklenmedik bir durum.");
+                    return "Beklenmedik bir durum";
                 }
             }
-            System.out.println("Fonksiyondan çıkıldı.");
         } else {
             System.out.println("Öğrenci bulunamadı.");
+            return "Öğrenci bulunamadı.";
         }
     }
+
 
     private StudentRecord createStudentRecord(Student student, String status) {
         LocalDate today = LocalDate.now();

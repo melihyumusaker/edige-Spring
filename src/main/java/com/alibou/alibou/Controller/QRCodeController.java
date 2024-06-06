@@ -38,8 +38,8 @@ public class QRCodeController {
     @PostMapping(value = "/saveStudentRecords")
     public synchronized  ResponseEntity<?> saveStudentRecords(@RequestBody SaveStudentRecordsDTO request) {
         try {
-            studentRecordService.saveStudentRecords(request);
-            return ResponseEntity.status(HttpStatus.OK).body("");
+            String response = studentRecordService.saveStudentRecords(request);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -49,8 +49,8 @@ public class QRCodeController {
     @PostMapping(value = "/getStudentRecords" , produces = "application/json;charset=UTF-8" )
     public ResponseEntity<?> getStudentRecords(@RequestBody GetStudentRecordsDTO request) {
         try {
-            GetStudentRecordsResponseDTO recorsds = studentRecordService.getStudentRecords(request);
-            return  ResponseEntity.status(HttpStatus.OK).body(recorsds);
+            GetStudentRecordsResponseDTO records = studentRecordService.getStudentRecords(request);
+            return  ResponseEntity.status(HttpStatus.OK).body(records);
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
