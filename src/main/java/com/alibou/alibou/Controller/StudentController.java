@@ -79,6 +79,7 @@ public class StudentController {
         try {
             studentService.setEnneagramTestSolved(request.getStudent_id());
             studentService.postRelation(request.getTeacher_id() , request.getStudent_id());
+            studentService.incrementTeachersStudentNumberValue(request.getTeacher_id());
             return ResponseEntity.ok().build();
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());

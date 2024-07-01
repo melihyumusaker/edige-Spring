@@ -9,8 +9,11 @@ import com.alibou.alibou.Model.StudentRecord;
 import com.alibou.alibou.Repository.RelationRepository;
 import com.alibou.alibou.Repository.StudentRecordRepository;
 import com.alibou.alibou.Repository.StudentRepository;
+import com.alibou.alibou.Repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
@@ -24,31 +27,24 @@ public class StudentRecordService implements IStudentRecordService {
 
     private final StudentRecordRepository studentRecordRepository;
     private final StudentRepository studentRepository;
+
     @Autowired
     public StudentRecordService(StudentRecordRepository studentRecordRepository,StudentRepository studentRepository){
         this.studentRecordRepository = studentRecordRepository;
         this.studentRepository  = studentRepository;
     }
-
     @Override
-    public synchronized  void saveStudentRecords(SaveStudentRecordsDTO request) {
+    public synchronized String saveStudentRecords(SaveStudentRecordsDTO request) {
         Optional<Student> optionalStudent = studentRepository.findByUserId(request.getUser_id());
 
         if (optionalStudent.isPresent()) {
             LocalDate today = LocalDate.now();
             LocalTime now = LocalTime.now();
-
+            String name = optionalStudent.get().getUser().getName();
             Optional<StudentRecord> todayRecordOptional = studentRecordRepository.findTodayRecordByStudentId(request.getUser_id(), today);
-            System.out.println("Fonksiyona girdi.");
-            System.out.println("Bugün tarih: " + today);
 
             if (!todayRecordOptional.isPresent()) {
-                // Bugün için kayıt yok, yeni "Entered" kaydı oluştur
-                StudentRecord studentRecord = createStudentRecord(optionalStudent.get(), "Entered");
-                System.out.println("Entered kaydı oluşturuluyor.");
-                studentRecord.setEntry_time(now);
-                studentRecordRepository.save(studentRecord);
-                System.out.println("Entered kaydı alındı ve kaydedildi.");
+                return "Beklenmedik durum oluştu. Devamsızlık kaydı otomatik oluşturulmamış";
             } else {
                 System.out.println("Bugün için kayıt bulundu.");
                 StudentRecord todayRecord = todayRecordOptional.get();
@@ -71,18 +67,26 @@ public class StudentRecordService implements IStudentRecordService {
                         todayRecord.setExit_time(Date.from(now.atDate(today).atZone(ZoneId.systemDefault()).toInstant()));
                         studentRecordRepository.save(todayRecord);
                         System.out.println("Exited kaydı alındı ve güncellendi.");
+                        return "Görüşürüz " + name;
                     } else {
                         System.out.println("QR kodu son girişten 1 dakika içinde tarandı. Tekrar taramayı yok say.");
+                        return "QR kodunuz tarandı. " + name;
                     }
                 } else {
-                    System.out.println("Giriş zamanı null. Bu, beklenmedik bir durum.");
+                    todayRecord.setStatus("Entered");
+                    todayRecord.setEntry_time(now);
+                    studentRecordRepository.save(todayRecord);
+                    return "Hoşgeldin " + name;
                 }
             }
-            System.out.println("Fonksiyondan çıkıldı.");
         } else {
             System.out.println("Öğrenci bulunamadı.");
+            return "Öğrenci bulunamadı.";
         }
     }
+
+
+
 
     private StudentRecord createStudentRecord(Student student, String status) {
         LocalDate today = LocalDate.now();
@@ -117,5 +121,43 @@ public class StudentRecordService implements IStudentRecordService {
                 .toplamDevamsizlik(countRecordsWithNullExitTime)
                 .studentRecord(specialStudentRecordDTOList)
                 .build();
+    }
+
+    @Override
+    public int getStudentTotalRecord(GetStudentRecordsDTO request) {
+
+        int countRecordsWithNullExitTime = studentRecordRepository.countRecordsWithNullExitTime(request.getStudent_id());
+        return countRecordsWithNullExitTime;
+    }
+
+
+    @Transactional
+    @Scheduled(fixedRate = 86400000) // Her 24 saatte bir çalışacak
+    public void saveStudentRecordsDaily() {
+        LocalDate today = LocalDate.now();
+
+        // Bugün Pazar ise işlemi iptal et
+        if (today.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            System.out.println("Bugün Pazar, kayıt oluşturulmadı.");
+            return;
+        }
+
+        Date nowDate = java.sql.Date.valueOf(today);
+        List<Integer> studentIds = studentRepository.findAllStudentIds();
+
+        studentIds.forEach(studentId -> {
+            Optional<Student> optionalStudent = studentRepository.findById(studentId);
+            if (optionalStudent.isPresent()) {
+                Student student = optionalStudent.get();
+                StudentRecord studentRecord = StudentRecord.builder()
+                        .student_id(student)
+                        .date(nowDate)
+                        .status("Empty")
+                        .build();
+                studentRecordRepository.save(studentRecord);
+            } else {
+                System.out.println("Öğrenci bulunamadı: " + studentId);
+            }
+        });
     }
 }
