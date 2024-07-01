@@ -23,5 +23,4 @@ public class QRCodeService implements IQRCodeService {
             return null;
         }
     }
-
 }

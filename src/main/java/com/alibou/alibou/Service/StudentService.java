@@ -125,6 +125,21 @@ public class StudentService implements IStudentService {
     }
 
     @Override
+    public void incrementTeachersStudentNumberValue(int teacher_id) {
+        Optional<Teacher> optionalTeacher = teacherRepository.findById(teacher_id);
+        if (optionalTeacher.isPresent()) {
+            Teacher teacher = optionalTeacher.get();
+            int newStudentNumber = teacher.getStudent_number() + 1;
+            teacher.setStudent_number(newStudentNumber);
+
+            teacherRepository.save(teacher);
+        } else {
+            throw new EntityNotFoundException("Öğretmen Bulunamadı");
+        }
+    }
+
+
+    @Override
     public boolean updateStudent(GetAllStudentResponseDTO request) {
         Optional<Student> optionalStudent = studentRepository.findById(request.getStudent_id());
 
@@ -142,6 +157,8 @@ public class StudentService implements IStudentService {
             return false;
         }
     }
+
+
 
     private void updateStudentFields(Student student, GetAllStudentResponseDTO request) {
         updateIfNotNull(request.getEnneagram_result(), student::setEnneagram_result);

@@ -18,4 +18,6 @@ public interface IStudentService {
     void setEnneagramTestSolved(int studentId);
 
     boolean updateStudent(GetAllStudentResponseDTO request);
+
+    void incrementTeachersStudentNumberValue(int teacherId);
 }

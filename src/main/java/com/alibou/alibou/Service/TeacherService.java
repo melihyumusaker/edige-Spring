@@ -98,7 +98,7 @@ public class TeacherService implements ITeacherService {
 
     @Override
     public List<Teacher> getTeachersByStudentType(String studentType) {
-        List<Teacher> teachers = teacherRepository.findTeachersByStudentType(studentType);
+        List<Teacher> teachers = teacherRepository.findRecommendedTeachers(studentType);
         Collections.shuffle(teachers);
         return teachers;
     }
@@ -106,11 +106,8 @@ public class TeacherService implements ITeacherService {
     @Override
     public Teacher getTeacherDetails(int teacherId) {
         Teacher teacher = teacherRepository.findById(teacherId).orElse(null);
-        if (teacher == null) {
-            return null;
-        }else{
-            return teacher;
-        }
+        if (teacher == null)  return null;
+        else return teacher;
     }
 
     @Override
@@ -124,21 +121,12 @@ public class TeacherService implements ITeacherService {
         if (optionalTeacher.isPresent()) {
             Teacher existingTeacher = optionalTeacher.get();
 
-            if (about != null) {
-                existingTeacher.setAbout(about);
-            }
-            if (enneagram_result != null) {
-                existingTeacher.setEnneagram_result(enneagram_result);
-            }
-            if (isEnneagramTestSolved != 0) {
-                existingTeacher.setIs_enneagram_test_solved(isEnneagramTestSolved);
-            }
+            if (about != null) existingTeacher.setAbout(about);
+            if (enneagram_result != null) existingTeacher.setEnneagram_result(enneagram_result);
+            if (isEnneagramTestSolved != 0) existingTeacher.setIs_enneagram_test_solved(isEnneagramTestSolved);
 
-            teacherRepository.save(existingTeacher);
-            return true;
-        } else {
-            return false;
-        }
+            teacherRepository.save(existingTeacher); return true;
+        } else return false;
     }
 
     @Override
