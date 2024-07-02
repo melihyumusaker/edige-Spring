@@ -45,7 +45,6 @@ public class WeeklyProgramController {
         } else {
             return ResponseEntity.badRequest().body("Student not found or invalid data");
         }
-
     }
 
     @PutMapping("/updateWeeklyProgram")
