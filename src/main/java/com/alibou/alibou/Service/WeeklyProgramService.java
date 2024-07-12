@@ -101,19 +101,11 @@ public class WeeklyProgramService implements IWeeklyProgramService {
         if (optionalWeeklyProgram.isPresent()) {
             WeeklyProgram existingWeeklyProgram = optionalWeeklyProgram.get();
 
-            if (lessonName != null) {
-                existingWeeklyProgram.setLesson_name(lessonName);
-            }
-            if (day != null) {
-                existingWeeklyProgram.setDay(day);
-            }
-            if (lessonStartHour != null) {
-                existingWeeklyProgram.setLesson_start_hour(lessonStartHour);
-            }
-            if (lessonEndHour != null) {
-                existingWeeklyProgram.setLesson_end_hour(lessonEndHour);
-            }
-
+            if (lessonName != null)  existingWeeklyProgram.setLesson_name(lessonName);
+            if (day != null)   existingWeeklyProgram.setDay(day);
+            if (lessonStartHour != null)   existingWeeklyProgram.setLesson_start_hour(lessonStartHour);
+            if (lessonEndHour != null)  existingWeeklyProgram.setLesson_end_hour(lessonEndHour);
+            
             weeklyProgramRepository.save(existingWeeklyProgram);
 
             NotificationStudent notificationStudent = NotificationStudent.builder().
@@ -144,7 +136,6 @@ public class WeeklyProgramService implements IWeeklyProgramService {
             WeeklyProgram convertedProgram = convertToWeeklyProgram(detailsDTO);
             detailsDTOList.add(convertedProgram);
         }
-
         return detailsDTOList;
     }
 
@@ -176,8 +167,6 @@ public class WeeklyProgramService implements IWeeklyProgramService {
         }
     }
 
-
-
     private WeeklyProgramDetailsDTO convertToDTO(WeeklyProgram weeklyProgram) {
         WeeklyProgramDetailsDTO detailsDTO = new WeeklyProgramDetailsDTO();
         detailsDTO.setLessonName(weeklyProgram.getLesson_name());
@@ -186,6 +175,4 @@ public class WeeklyProgramService implements IWeeklyProgramService {
         detailsDTO.setLessonEndHour(weeklyProgram.getLesson_end_hour());
         return detailsDTO;
     }
-
-
 }

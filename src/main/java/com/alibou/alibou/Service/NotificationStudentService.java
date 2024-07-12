@@ -25,7 +25,6 @@ public class NotificationStudentService implements INotificationStudent {
     @Override
     public List<GetNotifStudentByStudentIdResponseDTO> getNotifStudentByStudentId(GetNotifStudentByStudentIdDTO request) {
         List<NotificationStudent> notifs = notificationStudentRepository.findAllByStudentId(request.getStudent_id());
-
         return notifs.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
