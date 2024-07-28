@@ -10,9 +10,7 @@ public interface IMeetingService {
     boolean createMeeting(CreateMeetingDTO request);
     boolean updateMeeting(UpdateMeetingDTO request);
     void deleteMeeting(DeleteMeetingDTO request);
-
     List<Meeting> getStudentMeetings(GetStudentMeetingsDTO request);
-
     List<Meeting> getTeacherAllMeetings(GetTeacherMeetingsDTO request);
     int countUnshownMeetingByStudentId(GetIsShownNumberDTO request);
     void updateIsShown();

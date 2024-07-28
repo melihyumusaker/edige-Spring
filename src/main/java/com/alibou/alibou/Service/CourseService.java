@@ -4,14 +4,14 @@ import com.alibou.alibou.DTO.Course.AddNewCourseDTO;
 import com.alibou.alibou.DTO.Course.DeleteCourseDTO;
 import com.alibou.alibou.DTO.Course.UpdateCourseDTO;
 import com.alibou.alibou.DTO.StudentCourse.StudentFinishHomeworkDTO;
-import com.alibou.alibou.Model.Course;
-import com.alibou.alibou.Model.Meeting;
-import com.alibou.alibou.Model.Student;
-import com.alibou.alibou.Model.WeeklyProgram;
+import com.alibou.alibou.Model.*;
 import com.alibou.alibou.Repository.CourseRepository;
+import com.alibou.alibou.Repository.NotificationStudentRepository;
 import com.alibou.alibou.Repository.StudentCourseRepository;
 import com.alibou.alibou.Repository.StudentRepository;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -22,11 +22,13 @@ public class CourseService implements ICourseService {
     private final CourseRepository courseRepository;
     private final StudentCourseRepository studentCourseRepository;
     private final StudentRepository studentRepository;
+    private final NotificationStudentRepository notificationStudentRepository;
 
-    public CourseService(CourseRepository courseRepository,StudentCourseRepository studentCourseRepository,StudentRepository studentRepository){
+    public CourseService(NotificationStudentRepository notificationStudentRepository, CourseRepository courseRepository,StudentCourseRepository studentCourseRepository,StudentRepository studentRepository){
         this.studentCourseRepository = studentCourseRepository;
         this.studentRepository = studentRepository;
         this.courseRepository = courseRepository;
+        this.notificationStudentRepository = notificationStudentRepository;
     }
 
     public List<Course> getAllCourses(){
@@ -63,6 +65,7 @@ public class CourseService implements ICourseService {
     public boolean updateCourse(UpdateCourseDTO request) {
         Optional<Course> optionalCourse = courseRepository.findById(request.getCourse_id());
 
+
         optionalCourse.ifPresent(existingCourse -> {
             updateIfNotNull(request.getCourse_name(), existingCourse::setCourse_name);
             updateIfNotNull(request.getSubcourse_name(), existingCourse::setSubcourse_name);
@@ -73,6 +76,18 @@ public class CourseService implements ICourseService {
             courseRepository.save(existingCourse);
         });
 
+        if(optionalCourse.isPresent()){
+            Optional<StudentCourse> optionalStudentCourse = studentCourseRepository.findByCourseId(optionalCourse.get().getCourse_id());
+
+            if(optionalStudentCourse.isPresent()){
+                NotificationStudent notificationStudent = NotificationStudent.builder().
+                        student_id(optionalStudentCourse.get().getStudent_id())
+                        .message(optionalCourse.get().getCourse_name() + " " + optionalCourse.get().getSubcourse_name() + " Adlı Ödevin Güncellendi")
+                        .create_at(java.sql.Date.valueOf(LocalDate.now()))
+                        .is_shown(false).build();
+                notificationStudentRepository.save(notificationStudent);
+            }
+        }
         return optionalCourse.isPresent();
     }
 

@@ -3,14 +3,8 @@ package com.alibou.alibou.Service;
 import com.alibou.alibou.Core.IServices.IMeetingService;
 import com.alibou.alibou.DTO.Meeting.*;
 import com.alibou.alibou.DTO.TrialExam.GetIsShownNumberDTO;
-import com.alibou.alibou.Model.Meeting;
-import com.alibou.alibou.Model.Relation;
-import com.alibou.alibou.Model.Student;
-import com.alibou.alibou.Model.Teacher;
-import com.alibou.alibou.Repository.MeetingRepository;
-import com.alibou.alibou.Repository.RelationRepository;
-import com.alibou.alibou.Repository.StudentRepository;
-import com.alibou.alibou.Repository.TeacherRepository;
+import com.alibou.alibou.Model.*;
+import com.alibou.alibou.Repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -25,11 +19,13 @@ import java.util.*;
 public class MeetingService implements IMeetingService {
     private final MeetingRepository meetingRepository;
     private final RelationRepository relationRepository;
+    private final NotificationStudentRepository notificationStudentRepository;
 
     @Autowired
-    public MeetingService(MeetingRepository meetingRepository, RelationRepository relationRepository){
+    public MeetingService(MeetingRepository meetingRepository, RelationRepository relationRepository, NotificationStudentRepository notificationStudentRepository){
         this.meetingRepository = meetingRepository;
         this.relationRepository = relationRepository;
+        this.notificationStudentRepository = notificationStudentRepository;
     }
 
 
@@ -52,6 +48,14 @@ public class MeetingService implements IMeetingService {
                     .build();
 
             meetingRepository.save(newMeeting);
+
+            NotificationStudent notificationStudent = NotificationStudent.builder().
+                    student_id(relationOptional.get().getStudent_id())
+                    .message("Yeni Toplantı Eklendi")
+                    .create_at(java.sql.Date.valueOf(LocalDate.now()))
+                    .is_shown(false).build();
+            notificationStudentRepository.save(notificationStudent);
+
             return true;
         }
         return false;
@@ -104,6 +108,14 @@ public class MeetingService implements IMeetingService {
                 }
             });
             meetingRepository.save(meeting);
+
+            NotificationStudent notificationStudent = NotificationStudent.builder().
+                    student_id(optionalMeeting.get().getRelation_id().getStudent_id())
+                    .message(meeting.getTitle() + " Adlı Toplantın Güncellendi")
+                    .create_at(java.sql.Date.valueOf(LocalDate.now()))
+                    .is_shown(false).build();
+            notificationStudentRepository.save(notificationStudent);
+
             return true;
         }
         return false;

@@ -30,4 +30,6 @@ public interface StudentCourseRepository extends JpaRepository<StudentCourse,Int
     @Query("SELECT COUNT(sc) FROM StudentCourse sc JOIN sc.course_id c WHERE sc.student_id.student_id = :studentId AND c.is_shown = 0")
     int countUnshownCoursesByStudentId(int studentId);
 
+    @Query("SELECT sc FROM StudentCourse sc WHERE sc.course_id.course_id = :courseId")
+    Optional<StudentCourse> findByCourseId(@Param("courseId") int courseId);
 }

@@ -106,7 +106,10 @@ public class SecurityConfiguration {
                         .requestMatchers("/meetings/deleteMeeting").hasAnyAuthority(Role.TEACHER.name(),Role.ADMIN.name())
                         .requestMatchers("/meetings/createMeeting").hasAnyAuthority(Role.TEACHER.name(),Role.ADMIN.name())
                         .requestMatchers("/meetings/getTeacherAllMeetings").hasAnyAuthority(Role.TEACHER.name(),Role.ADMIN.name())
-                        .requestMatchers("/meetings/getStudentAndTeacherSpecialMeetings").hasAnyAuthority(Role.STUDENT.name() , Role.TEACHER.name(),Role.ADMIN.name())
+                        .requestMatchers("/meetings/getStudentAndTeacherSpecialMeetings").hasAnyAuthority(Role.STUDENT.name(), Role.TEACHER.name(),Role.ADMIN.name())
+                                .requestMatchers("/notifStudent/getNotifStudentByStudentId").hasAnyAuthority(Role.STUDENT.name())
+                                .requestMatchers("/notifStudent/getUnseenNotifNumber").hasAnyAuthority(Role.STUDENT.name())
+                                .requestMatchers("/notifStudent/setAllNotifsUnshownValue1").hasAnyAuthority(Role.STUDENT.name())
                         .anyRequest().authenticated())
                 .cors(Customizer.withDefaults())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -123,7 +126,6 @@ public class SecurityConfiguration {
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder(){

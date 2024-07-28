@@ -1,13 +1,16 @@
 package com.alibou.alibou.Service;
 import com.alibou.alibou.Core.IServices.ITrialExamService;
 import com.alibou.alibou.DTO.TrialExam.*;
+import com.alibou.alibou.Model.NotificationStudent;
 import com.alibou.alibou.Model.Student;
 import com.alibou.alibou.Model.TrialExam;
+import com.alibou.alibou.Repository.NotificationStudentRepository;
 import com.alibou.alibou.Repository.StudentRepository;
 import com.alibou.alibou.Repository.TrialExamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -17,11 +20,13 @@ import java.util.stream.Collectors;
 public class TrialExamService implements ITrialExamService {
     private final TrialExamRepository trialExamRepository;
     private final StudentRepository studentRepository;
+    private final NotificationStudentRepository notificationStudentRepository;
 
     @Autowired
-    public TrialExamService(TrialExamRepository trialExamRepository,StudentRepository studentRepository){
+    public TrialExamService(NotificationStudentRepository notificationStudentRepository,TrialExamRepository trialExamRepository,StudentRepository studentRepository){
         this.trialExamRepository = trialExamRepository;
         this.studentRepository = studentRepository;
+        this.notificationStudentRepository = notificationStudentRepository;
     }
 
     public List<TrialExam> getAllTrialExams(){
@@ -72,6 +77,13 @@ public class TrialExamService implements ITrialExamService {
             trialExam.setIs_shown(0);
 
             trialExamRepository.save(trialExam);
+
+            NotificationStudent notificationStudent = NotificationStudent.builder().
+                    student_id(optionalStudent.get())
+                    .message("Deneme Sınavı Sonucun Eklendi")
+                    .create_at(java.sql.Date.valueOf(LocalDate.now()))
+                    .is_shown(false).build();
+            notificationStudentRepository.save(notificationStudent);
             return true;
         }else{
             return false;
@@ -127,6 +139,13 @@ public class TrialExamService implements ITrialExamService {
             trialExam.setNet(net);
 
             trialExamRepository.save(trialExam);
+
+            NotificationStudent notificationStudent = NotificationStudent.builder().
+                    student_id(optionalTrialExam.get().getStudent_id())
+                    .message(optionalTrialExam.get().getExam_name() + " Adlı Deneme Sınavın Güncellendi")
+                    .create_at(java.sql.Date.valueOf(LocalDate.now()))
+                    .is_shown(false).build();
+            notificationStudentRepository.save(notificationStudent);
 
             return true;
         } else {

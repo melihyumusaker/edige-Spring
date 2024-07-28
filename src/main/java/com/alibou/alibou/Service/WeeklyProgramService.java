@@ -2,9 +2,11 @@ package com.alibou.alibou.Service;
 
 import com.alibou.alibou.Core.IServices.IWeeklyProgramService;
 import com.alibou.alibou.DTO.WeeklyProgram.*;
+import com.alibou.alibou.Model.NotificationStudent;
 import com.alibou.alibou.Model.Parent;
 import com.alibou.alibou.Model.Student;
 import com.alibou.alibou.Model.WeeklyProgram;
+import com.alibou.alibou.Repository.NotificationStudentRepository;
 import com.alibou.alibou.Repository.ParentRepository;
 import com.alibou.alibou.Repository.StudentRepository;
 import com.alibou.alibou.Repository.WeeklyProgramRepository;
@@ -24,12 +26,14 @@ public class WeeklyProgramService implements IWeeklyProgramService {
     private final WeeklyProgramRepository weeklyProgramRepository;
     private final StudentRepository studentRepository;
     private final ParentRepository parentRepository;
+    private final NotificationStudentRepository notificationStudentRepository;
 
     @Autowired
-    public WeeklyProgramService(WeeklyProgramRepository weeklyProgramRepository,StudentRepository studentRepository,ParentRepository parentRepository){
+    public WeeklyProgramService(NotificationStudentRepository notificationStudentRepository,WeeklyProgramRepository weeklyProgramRepository,StudentRepository studentRepository,ParentRepository parentRepository){
         this.weeklyProgramRepository = weeklyProgramRepository;
         this.studentRepository = studentRepository;
         this.parentRepository = parentRepository;
+        this.notificationStudentRepository = notificationStudentRepository;
     }
 
     public List<WeeklyProgram> getAllWeeklyPrograms(){
@@ -55,6 +59,13 @@ public class WeeklyProgramService implements IWeeklyProgramService {
                     .build();
 
             weeklyProgramRepository.save(newWeeklyProgram);
+
+            NotificationStudent notificationStudent = NotificationStudent.builder().
+                    student_id(optionalStudent.get())
+                    .message("Ders Pogramına Yeni Görevler Eklendi")
+                    .create_at(java.sql.Date.valueOf(LocalDate.now()))
+                    .is_shown(false).build();
+            notificationStudentRepository.save(notificationStudent);
             return true; // Başarılı ekleme
         } else {
             return false; // Öğrenci bulunamadı
@@ -90,20 +101,20 @@ public class WeeklyProgramService implements IWeeklyProgramService {
         if (optionalWeeklyProgram.isPresent()) {
             WeeklyProgram existingWeeklyProgram = optionalWeeklyProgram.get();
 
-            if (lessonName != null) {
-                existingWeeklyProgram.setLesson_name(lessonName);
-            }
-            if (day != null) {
-                existingWeeklyProgram.setDay(day);
-            }
-            if (lessonStartHour != null) {
-                existingWeeklyProgram.setLesson_start_hour(lessonStartHour);
-            }
-            if (lessonEndHour != null) {
-                existingWeeklyProgram.setLesson_end_hour(lessonEndHour);
-            }
-
+            if (lessonName != null)  existingWeeklyProgram.setLesson_name(lessonName);
+            if (day != null)   existingWeeklyProgram.setDay(day);
+            if (lessonStartHour != null)   existingWeeklyProgram.setLesson_start_hour(lessonStartHour);
+            if (lessonEndHour != null)  existingWeeklyProgram.setLesson_end_hour(lessonEndHour);
+            
             weeklyProgramRepository.save(existingWeeklyProgram);
+
+            NotificationStudent notificationStudent = NotificationStudent.builder().
+                    student_id(optionalWeeklyProgram.get().getStudent_id())
+                    .message(day + " Günü Görevlerin Güncellendi")
+                    .create_at(java.sql.Date.valueOf(LocalDate.now()))
+                    .is_shown(false).build();
+            notificationStudentRepository.save(notificationStudent);
+
             return true; // Başarılı güncelleme
         } else {
             return false; // Weekly program bulunamadı
@@ -125,7 +136,6 @@ public class WeeklyProgramService implements IWeeklyProgramService {
             WeeklyProgram convertedProgram = convertToWeeklyProgram(detailsDTO);
             detailsDTOList.add(convertedProgram);
         }
-
         return detailsDTOList;
     }
 
@@ -157,8 +167,6 @@ public class WeeklyProgramService implements IWeeklyProgramService {
         }
     }
 
-
-
     private WeeklyProgramDetailsDTO convertToDTO(WeeklyProgram weeklyProgram) {
         WeeklyProgramDetailsDTO detailsDTO = new WeeklyProgramDetailsDTO();
         detailsDTO.setLessonName(weeklyProgram.getLesson_name());
@@ -167,6 +175,4 @@ public class WeeklyProgramService implements IWeeklyProgramService {
         detailsDTO.setLessonEndHour(weeklyProgram.getLesson_end_hour());
         return detailsDTO;
     }
-
-
 }
