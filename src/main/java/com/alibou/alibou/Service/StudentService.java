@@ -38,21 +38,27 @@ public class StudentService implements IStudentService {
         this.userRepository = userRepository;
     }
 
-    public List<GetAllStudentResponseDTO> getAllStudents(){
+      public List<GetAllStudentResponseDTO> getAllStudents(){
         List<Student> students = studentRepository.findAll();
-        List<GetAllStudentResponseDTO> response = students.stream().map(student -> GetAllStudentResponseDTO.builder()
-                        .student_id(student.getStudent_id())
-                .name(student.getUser().getName())
-                .surname(student.getUser().getSurname())
-                .birth_date(student.getUser().getBirth_date())
-                .email(student.getUser().getEmail())
-                .phone(student.getUser().getPhone())
-                .city(student.getUser().getCity())
-                .enneagram_result(student.getEnneagram_result())
-                .section(student.getSection())
-                .school(student.getSchool())
-                .coachName(student.getTeacher().getUser().getName() + " " + student.getTeacher().getUser().getSurname()).build())
-                .collect(Collectors.toList());
+        List<GetAllStudentResponseDTO> response = students.stream().map(student -> {
+            String coachName = null;
+            if (student.getTeacher() != null && student.getTeacher().getUser() != null) {
+                coachName = student.getTeacher().getUser().getName() + " " + student.getTeacher().getUser().getSurname();
+            }
+            return GetAllStudentResponseDTO.builder()
+                    .student_id(student.getStudent_id())
+                    .name(student.getUser().getName())
+                    .surname(student.getUser().getSurname())
+                    .birth_date(student.getUser().getBirth_date())
+                    .email(student.getUser().getEmail())
+                    .phone(student.getUser().getPhone())
+                    .city(student.getUser().getCity())
+                    .enneagram_result(student.getEnneagram_result())
+                    .section(student.getSection())
+                    .school(student.getSchool())
+                    .coachName(coachName)
+                    .build();
+        }).collect(Collectors.toList());
         return response;
     }
 
