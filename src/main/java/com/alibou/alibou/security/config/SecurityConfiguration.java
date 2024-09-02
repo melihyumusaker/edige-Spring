@@ -80,6 +80,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/students-courses/get-students-done-courses").permitAll()
                         .requestMatchers("/students-courses/get-students-not-done-courses").permitAll()
                         .requestMatchers("/students-courses/addNewStudentCourseAndCourse").hasAnyAuthority(Role.TEACHER.name(),Role.ADMIN.name())
+                                .requestMatchers("/students-courses/addNewStudentCourseAndCourseForWeb").hasAnyAuthority(Role.TEACHER.name(),Role.ADMIN.name())
                         .requestMatchers("/trial-exams/setStudentTrialExamResult").permitAll()
                         .requestMatchers("/trial-exams/getStudentTrialExams").permitAll()
                         .requestMatchers("/trial-exams/getStudentTrialExamsByTeacher").permitAll()

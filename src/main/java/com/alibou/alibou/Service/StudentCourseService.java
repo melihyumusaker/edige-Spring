@@ -2,6 +2,7 @@ package com.alibou.alibou.Service;
 
 import com.alibou.alibou.Core.IServices.IStudentCourseService;
 import com.alibou.alibou.DTO.StudentCourse.AddNewStudentCourseAndCourseDTO;
+import com.alibou.alibou.DTO.StudentCourse.AddNewStudentCourseAndCourseForWebDTO;
 import com.alibou.alibou.DTO.StudentCourse.AddNewStudentCourseDTO;
 import com.alibou.alibou.DTO.StudentCourse.StudentFinishHomeworkDTO;
 import com.alibou.alibou.Model.*;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -66,6 +68,55 @@ public class StudentCourseService implements IStudentCourseService {
     public int countUnshownCoursesByStudentId(int studentId) {
         return studentCourseRepository.countUnshownCoursesByStudentId(studentId);
     }
+
+    @Override
+    public void addNewStudentCourseAndCourseForWeb(AddNewStudentCourseAndCourseForWebDTO request) {
+        LocalTime now = LocalTime.now();
+        LocalDate today = LocalDate.now();
+
+        LocalDate date = request.getDate();
+        LocalTime time = request.getTime();
+
+        // Date ve Time'ı LocalDateTime'a dönüştürüp, ardından Date'e çevirme
+        LocalDateTime homeworkDeadline = date.atTime(time);
+
+        Course course = Course.builder()
+                .course_name(request.getCourse_name())
+                .subcourse_name(request.getSubcourse_name())
+                .student_comment("")
+                .homework_description(request.getHomework_description())
+                .is_homework_done(0)
+                .homework_deadline(homeworkDeadline)
+                .is_shown(0)
+                .build();
+
+        courseRepository.save(course);
+
+        int newCourseId = course.getCourse_id();
+
+        Optional<Course> newCourse = courseRepository.findById(newCourseId);
+        Optional<Student> student = studentRepository.findById(request.getStudent_id());
+
+        if(newCourse.isPresent() && student.isPresent()){
+            StudentCourse studentCourse = StudentCourse.builder()
+                    .student_id(student.get())
+                    .course_id(newCourse.get())
+                    .build();
+
+            studentCourseRepository.save(studentCourse);
+
+            NotificationStudent notificationStudent = NotificationStudent.builder().
+                    student_id(student.get())
+                    .message("Yeni Ödev Eklendi: " + request.getCourse_name() + " " + request.getSubcourse_name())
+                    .create_at(Date.from(now.atDate(today).atZone(ZoneId.systemDefault()).toInstant()))
+                    .is_shown(false).build();
+
+            System.out.println("Notif kaydedildi");
+
+            notificationStudentRepository.save(notificationStudent);
+        }
+    }
+
     @Override
     public void addNewStudentCourseAndCourse(AddNewStudentCourseAndCourseDTO request) {
         LocalTime now = LocalTime.now();

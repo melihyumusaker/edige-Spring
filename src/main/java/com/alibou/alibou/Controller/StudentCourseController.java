@@ -2,10 +2,7 @@ package com.alibou.alibou.Controller;
 
 import com.alibou.alibou.Core.IServices.IStudentCourseService;
 import com.alibou.alibou.DTO.Course.AddNewCourseDTO;
-import com.alibou.alibou.DTO.StudentCourse.AddNewStudentCourseAndCourseDTO;
-import com.alibou.alibou.DTO.StudentCourse.AddNewStudentCourseDTO;
-import com.alibou.alibou.DTO.StudentCourse.GetStudentsCoursesDTO;
-import com.alibou.alibou.DTO.StudentCourse.StudentFinishHomeworkDTO;
+import com.alibou.alibou.DTO.StudentCourse.*;
 import com.alibou.alibou.Model.Course;
 import com.alibou.alibou.Model.Student;
 import com.alibou.alibou.Model.StudentCourse;
@@ -47,6 +44,16 @@ public class StudentCourseController {
     public ResponseEntity<?> addNewStudentCourseAndCourse(@RequestBody AddNewStudentCourseAndCourseDTO request) {
         try {
             studentCourseService.addNewStudentCourseAndCourse(request);
+            return  ResponseEntity.ok("");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/addNewStudentCourseAndCourseForWeb")
+    public ResponseEntity<?> addNewStudentCourseAndCourseForWeb(@RequestBody AddNewStudentCourseAndCourseForWebDTO request) {
+        try {
+            studentCourseService.addNewStudentCourseAndCourseForWeb(request);
             return  ResponseEntity.ok("");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
